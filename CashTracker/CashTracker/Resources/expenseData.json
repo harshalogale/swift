@@ -1,0 +1,16 @@
+[
+    {
+        "title": "Veggies",
+        "amount": 15.95,
+        "datetime": "2019-10-17T10:15:00Z",
+        "category": "Vegetables",
+        "address": "",
+        "notes": "",
+        "id": 1001,
+        "coordinates": {
+            "longitude": -116.166868,
+            "latitude": 34.011286
+        },
+        "imageName": "turtlerock"
+    }
+]

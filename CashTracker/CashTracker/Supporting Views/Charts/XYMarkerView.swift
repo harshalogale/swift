@@ -1,0 +1,39 @@
+//
+//  XYMarkerView.swift
+//  ChartsDemo-iOS
+//
+//  Created by Jacob Christie on 2017-07-09.
+//  Copyright © 2017 jc. All rights reserved.
+//
+
+import Foundation
+import Charts
+#if canImport(UIKit)
+    import UIKit
+#endif
+import CashTrackerShared
+
+public class XYMarkerView: BalloonMarker {
+    public var xAxisValueFormatter: AxisValueFormatter
+    fileprivate var yFormatter = NumberFormatter()
+    
+    public init(color: UIColor, font: UIFont, textColor: UIColor, insets: UIEdgeInsets,
+                xAxisValueFormatter: AxisValueFormatter) {
+        self.xAxisValueFormatter = xAxisValueFormatter
+        yFormatter.minimumFractionDigits = 1
+        yFormatter.maximumFractionDigits = 1
+        super.init(color: color, font: font, textColor: textColor, insets: insets)
+    }
+    
+    public override func refreshContent(entry: ChartDataEntry, highlight: Highlight) {
+        let strDate = nil != entry.data
+            ? DateFormatter.expDateMonthOnlyFormatter.string(from: (entry.data! as! Date))
+           : xAxisValueFormatter.stringForValue(entry.x, axis: XAxis())
+        
+        let string = "Dt" + ": " + strDate + ", " + "Amt" + ": "
+            + (CashTrackerSharedHelper.currencyFormatter.string(from:entry.y as NSNumber) ?? "\(entry.y)")
+            
+        setLabel(string)
+    }
+    
+}

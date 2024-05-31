@@ -1,0 +1,152 @@
+"0Wc58k" = "Show recent cash additions.";
+
+"1RLEeH" = "खर्च जोडण्यात अक्षम.";
+
+"1tidlY" = "Add ${amount} cash from ${title}.";
+
+"2J2Y0M" = "${displayName} can't be negative.";
+
+"2Mz1Je" = "खर्च जोडण्यात अक्षम.";
+
+"4QAPmI" = "Sorry, I was unable to fetch the cash-in-hand status.";
+
+"4TDxnC" = "Cash";
+
+"4wtMaP" = "Title";
+
+"77GjQG" = "Add ${amount}.";
+
+"7HiGMW" = "Unable to add cash.";
+
+"7kMMuA" = "Added ${amount} expense for ${title}.";
+
+"8Lk2fL" = "Title";
+
+"9ECdiu" = "You have ${amount} cash-in-hand.";
+
+"9LkET2" = "Amount";
+
+"9bvx4E" = "${displayName} can't be lower than ${minimumValue}.";
+
+"9z9wFy" = "Unable to fetch recent expenses.";
+
+"Ai1ZUs" = "${status}";
+
+"EmdlQp" = "Expenses";
+
+"FG9bt8" = "Expense Details";
+
+"HgyEqD" = "Unable to email report: ${failureReason}";
+
+"IMEaCQ" = "Details";
+
+"Iz75Gi" = "Amount";
+
+"J8la8i" = "Added ${amount} cash.";
+
+"JAv7Qm" = "Which one?";
+
+"JM9Oof" = "Add ${amount} expense for ${title}.";
+
+"JqFoe6" = "Add amount.";
+
+"Jy8OGZ" = "Log a new cash expense.";
+
+"KGVgVM" = "${displayName} can't be higher than ${maximumValue}.";
+
+"KyuWpk" = "Email Cash Expense Report";
+
+"LGJbce" = "Unable to fetch recent cash additions.";
+
+"NFFHbK" = "Get current cash-in-hand status.";
+
+"Of7Sja" = "Provide expense amount.";
+
+"OoHzMX" = "${expenses}";
+
+"P9JBDA" = "There are ${count} options matching ‘${amount}’.";
+
+"PZ75uf" = "Title";
+
+"QXuMH7" = "Failure Reason";
+
+"SvOS4N" = "Amount";
+
+"UW2sKy" = "Get current cash-in-hand status.";
+
+"V5WP0S" = "${displayName} can't be higher than ${maximumValue}.";
+
+"VE72IJ" = "Amount";
+
+"WJqGzW" = "Add Cash";
+
+"WghdaS" = "Email Cash Expense Report";
+
+"WsAlAn" = "Recent Cash";
+
+"XGpdHV" = "Show Recent Cash Expenses.";
+
+"Zg18b6" = "Here are the recent expenses:";
+
+"avint8" = "Status";
+
+"bA6DMv" = "${displayName} can't be lower than ${minimumValue}.";
+
+"bYIUNS" = "${cash}";
+
+"c7kYcR" = "Get current cash-in-hand status.";
+
+"cKWayU" = "Recent Cash Expenses";
+
+"dCnd2W" = "Show Recent Cash Expenses.";
+
+"fs5Qfg" = "Provide expense title.";
+
+"g723Fr" = "Show recent cash additions.";
+
+"gk8TI8" = "Add title.";
+
+"h3JVJU" = "Expense Details";
+
+"hQVujg" = "Provide expense details: 'amount' for 'title'";
+
+"i8izeu" = "Amount";
+
+"iu3Hr2" = "Just to confirm, you wanted ‘${amount}’?";
+
+"jrDoEb" = "${amount} expense added.";
+
+"ksQU6C" = "Amount";
+
+"l2plyz" = "Export Report";
+
+"mQY2Kd" = "Show recent cash additions.";
+
+"nEKo8Q" = "Add expense";
+
+"nKEE3F" = "Add Payment";
+
+"pWCnve" = ""; // New Cash
+
+"pu3VMf" = "Add Expense";
+
+"rEUsEH" = "${displayName} can't be negative.";
+
+"tS7jsf" = "Add ${amount} cash from ${title}.";
+
+"vMRhdn" = "Add ${amount} expense for ${title}.";
+
+"vNEsFN" = "Add ${amount} expense.";
+
+"vj44CQ" = "Email Cash Expense Report";
+
+"xloFJG" = "Log a cash addition entry.";
+
+"yX1Z7l" = "Here are the recent cash additions:";
+
+"yiGJDk" = "Check Cash-In-Hand";
+
+"zjiPIN" = ""; // New Expense
+
+"zq8V5E" = "Show Recent Cash Expenses.";
+

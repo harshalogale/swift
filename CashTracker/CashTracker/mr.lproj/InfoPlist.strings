@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  CashTracker
+
+  Created by Harshal Ogale on 08/11/19.
+  Copyright © 2019 Harshal Ogale. All rights reserved.
+*/
+"CFBundleDisplayName" = "नगद मोजक";
+"CFBundleName" = "नगद मोजक";

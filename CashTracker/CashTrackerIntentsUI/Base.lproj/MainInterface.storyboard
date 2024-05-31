@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ObA-dk-sSI">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Intent View Controller-->
+        <scene sceneID="7MM-of-jgj">
+            <objects>
+                <viewController id="ObA-dk-sSI" customClass="IntentViewController" customModule="CashTrackerIntentsUI" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="zMn-AG-sqS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aUD-JM-huR">
+                                <rect key="frame" x="16" y="44" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VMe-VQ-Vea">
+                                <rect key="frame" x="16" y="65" width="288" height="85"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="VMe-VQ-Vea" firstAttribute="trailing" secondItem="zMn-AG-sqS" secondAttribute="trailingMargin" id="0UW-Xm-HOU"/>
+                            <constraint firstItem="4PN-XC-lEE" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="aUD-JM-huR" secondAttribute="trailing" symbolic="YES" id="SrI-QU-lLi"/>
+                            <constraint firstItem="VMe-VQ-Vea" firstAttribute="top" secondItem="aUD-JM-huR" secondAttribute="bottom" id="Tn7-tZ-qAh"/>
+                            <constraint firstItem="VMe-VQ-Vea" firstAttribute="bottom" secondItem="4PN-XC-lEE" secondAttribute="bottom" id="WHl-aS-GEg"/>
+                            <constraint firstItem="aUD-JM-huR" firstAttribute="leading" secondItem="VMe-VQ-Vea" secondAttribute="leading" id="kRd-PC-leF"/>
+                            <constraint firstItem="aUD-JM-huR" firstAttribute="leading" secondItem="zMn-AG-sqS" secondAttribute="leadingMargin" id="uID-Va-6Q8"/>
+                            <constraint firstItem="aUD-JM-huR" firstAttribute="top" secondItem="4PN-XC-lEE" secondAttribute="top" id="wLs-Gg-rBR"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="4PN-XC-lEE"/>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="150"/>
+                    <connections>
+                        <outlet property="messageTextView" destination="VMe-VQ-Vea" id="Jbd-Vm-xBE"/>
+                        <outlet property="titleLabel" destination="aUD-JM-huR" id="tLc-Rb-XRn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="101.78571428571428"/>
+        </scene>
+    </scenes>
+</document>
