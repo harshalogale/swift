@@ -1,0 +1,42 @@
+/* Class = "UIViewController"; title = "Profile"; ObjectID = "8rJ-Kc-sve"; */
+"8rJ-Kc-sve.title" = "चरित्र";
+
+/* Class = "UISearchBar"; placeholder = "Search Spotify Albums"; ObjectID = "Kot-gA-3KW"; */
+"Kot-gA-3KW.placeholder" = "स्पॉटिफाय अल्बम शोधा";
+
+/* Class = "UISearchBar"; Kot-gA-3KW.scopeButtonTitles[0] = "Albums"; ObjectID = "Kot-gA-3KW"; */
+"Kot-gA-3KW.scopeButtonTitles[0]" = "अल्बम";
+
+/* Class = "UISearchBar"; Kot-gA-3KW.scopeButtonTitles[1] = "Artists"; ObjectID = "Kot-gA-3KW"; */
+"Kot-gA-3KW.scopeButtonTitles[1]" = "कलाकार";
+
+/* Class = "UISearchBar"; Kot-gA-3KW.scopeButtonTitles[2] = "Playlists"; ObjectID = "Kot-gA-3KW"; */
+"Kot-gA-3KW.scopeButtonTitles[2]" = "याद्या";
+
+/* Class = "UISearchBar"; Kot-gA-3KW.scopeButtonTitles[3] = "Tracks"; ObjectID = "Kot-gA-3KW"; */
+"Kot-gA-3KW.scopeButtonTitles[3]" = "गाणी";
+
+/* Class = "UILabel"; text = "Please Login To View Your Spotify Profile."; ObjectID = "NDk-cv-Gan"; */
+"NDk-cv-Gan.text" = "कृपया आपले स्पॉटिफाय प्रोफाइल पहाण्या करता लॉग इन करा.";
+
+/* Class = "UILabel"; text = "No Search Results Found"; ObjectID = "W03-N0-mT8"; */
+"W03-N0-mT8.text" = "शोध परिणाम आढळले नाहीत";
+
+/* Class = "UITabBarItem"; title = "Search"; ObjectID = "bWM-Bk-wlg"; */
+"bWM-Bk-wlg.title" = "शोध";
+
+/* Class = "UITabBarItem"; title = "User Profile"; ObjectID = "cPa-gy-q4n"; */
+"cPa-gy-q4n.title" = "वापरकर्ता चरित्र";
+
+/* Class = "UINavigationItem"; title = "Spotify Search"; ObjectID = "gam-s3-aGm"; */
+"gam-s3-aGm.title" = "स्पॉटिफाय शोध";
+
+/* Class = "UINavigationItem"; title = "User Profile"; ObjectID = "odf-Jk-jdR"; */
+"odf-Jk-jdR.title" = "वापरकर्ता चरित्र";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "oeH-oH-ydm"; */
+"oeH-oH-ydm.text" = "शीर्षक";
+
+/* Class = "UILabel"; text = "User Profile"; ObjectID = "zEq-FU-wV5"; */
+"zEq-FU-wV5.text" = "वापरकर्ता चरित्र";
+
