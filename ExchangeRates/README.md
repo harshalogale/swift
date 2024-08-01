@@ -2,7 +2,7 @@
 ## Features
 * A SwiftUI / Combine / MVVM based iOS app for viewing live Currency Exchange Rates.
 * Utilizes [ExchangeRateAPI](http://exchangerate-api.com) web services REST API for accessing live currency exchange rates
-* Incorporates views such as `TabView`, `NavigationStack`, `Picker`, `ForEach`, `Text`, `TextField`, `Label`, `ScrollView`, `VStack`, `HSTack`, `Button`, `Spacer`
+* Incorporates views such as `TabView`, `NavigationStack`, `Picker`, `ForEach`, `Text`, `TextField`, `Label`, `ScrollView`, `VStack`, `HStack`, `Button`, `Spacer`
 * ConversionRateView -- Find exchange rate from a source currency and a target currency
 * ExchangeRatesView -- Find the list of exchange rates from the source currency to all other currencies
 * The pickers are pre-populated with the list of supported currencies.
