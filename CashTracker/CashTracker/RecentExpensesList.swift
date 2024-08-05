@@ -22,8 +22,7 @@ struct RecentExpensesList: View {
                     Text("Recent Expenses")
                         .font(.headline).bold().padding(.leading, 10)
                     Spacer()
-                    NavigationLink(destination: ExpenseHistory()
-                        .environment(\.managedObjectContext, self.managedObjectContext)) {
+                    NavigationLink(destination: ExpenseHistory()) {
                             Text("Expense History").font(.subheadline).bold()
                             Image(systemName:"arrow.right.circle.fill")
                                 .foregroundColor(.gray)
@@ -43,7 +42,6 @@ struct RecentExpensesList: View {
                     ForEach(recentExpenses, id: \.self) { expense in
                         NavigationLink(
                             destination: ExpenseDetail(expense)
-                                .environment(\.managedObjectContext, self.managedObjectContext)
                         ) {
                             ExpenseRow(expense: .constant(expense))
                         }

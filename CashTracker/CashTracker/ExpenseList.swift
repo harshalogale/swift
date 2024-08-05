@@ -52,7 +52,6 @@ struct ExpenseList: View {
                 ForEach(expenses, id:\.self) { expense in
                     NavigationLink(
                         destination: ExpenseDetail(expense)
-                            .environment(\.managedObjectContext, self.managedObjectContext)
                     ) {
                         ExpenseRow(expense: .constant(expense))
                     }

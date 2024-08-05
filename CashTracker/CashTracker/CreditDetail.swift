@@ -42,7 +42,6 @@ struct CreditDetail: View {
                 .popover(isPresented: self.$isCreditEditFormVisible,
                          arrowEdge: .bottom) {
                             CreditEntry(self.$credit)
-                                .environment(\.managedObjectContext, self.managedObjectContext)
                 }
             }
             

@@ -100,7 +100,6 @@ struct CreditHistory: View {
             ) {
                 withAnimation(.linear(duration: 0.6)) {
                     CashCreditList(self.$startDate, self.$endDate, self.$sortOn, self.$sortOrder)
-                        .environment(\.managedObjectContext, self.managedObjectContext)
                 }
             }
             .navigationBarTitle(Text("Cash Addition History"))
@@ -155,7 +154,6 @@ struct CashCreditList: View {
                 ForEach(credits, id:\.self) { credit in
                     NavigationLink(
                         destination: CreditDetail(credit)
-                            .environment(\.managedObjectContext, self.managedObjectContext)
                     ) {
                         CreditRow(credit: .constant(credit))
                     }

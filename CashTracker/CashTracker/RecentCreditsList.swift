@@ -20,7 +20,7 @@ struct RecentCreditsList: View {
                 HStack {
                     Text("Recent Credits").font(.headline).bold().padding(.leading, 10)
                     Spacer()
-                    NavigationLink(destination: CreditHistory().environment(\.managedObjectContext, self.managedObjectContext)) {
+                    NavigationLink(destination: CreditHistory()) {
                         Text("Cash Addition History").font(.subheadline).bold()
                         Image(systemName:"arrow.right.circle.fill")
                             .foregroundColor(.gray)
@@ -39,7 +39,6 @@ struct RecentCreditsList: View {
                     ForEach(recentCredits, id: \.self) { credit in
                         NavigationLink(
                             destination: CreditDetail(credit)
-                                .environment(\.managedObjectContext, self.managedObjectContext)
                         ) {
                             CreditRow(credit: .constant(credit))
                         }

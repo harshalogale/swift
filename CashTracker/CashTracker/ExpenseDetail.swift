@@ -88,7 +88,6 @@ struct ExpenseDetail: View {
                     .popover(isPresented: self.$isExpenseEditFormVisible,
                              arrowEdge: .bottom) {
                                 ExpenseEntry(self.$expense)
-                                    .environment(\.managedObjectContext, self.managedObjectContext)
                     }
                 }
                 

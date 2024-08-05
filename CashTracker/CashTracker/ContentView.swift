@@ -12,8 +12,6 @@ import Combine
 import CashTrackerShared
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
-    
     @Environment(\.colorScheme) var colorScheme
     
     @EnvironmentObject var settings: UserSettings
@@ -45,7 +43,6 @@ struct ContentView: View {
                         Spacer()
                     }
                     CashInHandView()
-                        .environment(\.managedObjectContext, self.managedObjectContext)
                     Spacer()
                 }
                 .background(colorScheme == .dark ? Color(UIColor.systemGray5): Color.orange)
@@ -53,7 +50,7 @@ struct ContentView: View {
                 .cornerRadius(8)
                 .padding(Edge.Set(arrayLiteral: [.leading, .trailing]), 10)
                 
-                HStack {
+                HStack(alignment: .top) {
                     VStack {
                         Image("addcash")
                             .resizable()
@@ -68,7 +65,6 @@ struct ContentView: View {
                     .popover(isPresented: self.$isCreditEntryFormVisible,
                              arrowEdge: .bottom) {
                                 CreditEntry(.constant(nil))
-                                    .environment(\.managedObjectContext, self.managedObjectContext)
                     }
                     
                     Spacer()
@@ -87,14 +83,13 @@ struct ContentView: View {
                     .popover(isPresented: self.$isExpenseEntryFormVisible,
                              arrowEdge: .bottom) {
                                 ExpenseEntry(.constant(nil))
-                                    .environment(\.managedObjectContext, self.managedObjectContext)
                     }
                     
                     Spacer()
                     
                     NavigationLink(destination:
                         ExpenseAnalysisContainer()
-                            .environment(\.managedObjectContext, self.managedObjectContext))
+                    )
                     {
                         VStack {
                             Image("analysis2")
@@ -110,7 +105,6 @@ struct ContentView: View {
                     
                     NavigationLink(destination:
                         SettingsView()
-                            .environment(\.managedObjectContext, self.managedObjectContext)
                             .environmentObject(self.settings)
                         )
                     {
@@ -129,10 +123,8 @@ struct ContentView: View {
                 Divider()
                 
                 RecentCreditsList()
-                    .environment(\.managedObjectContext, self.managedObjectContext)
                 
                 RecentExpensesList()
-                    .environment(\.managedObjectContext, self.managedObjectContext)
             }
             .navigationBarTitle("Cash Expense Tracker")
         }

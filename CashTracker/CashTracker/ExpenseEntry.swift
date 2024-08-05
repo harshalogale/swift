@@ -269,7 +269,6 @@ struct ExpenseEntry: View {
                   .lineLimit(1)
                   .background(CenteringView())
                CategoryPicker(category: $category)
-                  .environment(\.managedObjectContext, self.managedObjectContext)
             }
             
             HStack {

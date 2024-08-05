@@ -14,7 +14,12 @@ import Combine
 
 public class CashTrackerSharedHelper: NSObject {
     
-    public static let currencies = ["AED", "AUD", "BRL", "CHF", "CNY", "EUR", "GBP", "INR", "JPY", "USD"]
+    public static let currencies =
+    if #available(iOSApplicationExtension 16, *) {
+        Locale.commonISOCurrencyCodes
+    } else {
+        ["AED", "AUD", "BRL", "CHF", "CNY", "EUR", "GBP", "INR", "JPY", "USD"]
+    }
     
     public static let FirstStartCompleteKey = "firstStartComplete"
     

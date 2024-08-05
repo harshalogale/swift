@@ -10,7 +10,6 @@ import IntentsUI
 import CashTrackerShared
 
 struct ExpenseHistory: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) var editMode
     
     @State private var showingSortFilter = false
@@ -99,7 +98,6 @@ struct ExpenseHistory: View {
             ) {
                 withAnimation(.linear(duration: 0.6)) {
                     ExpenseList(self.$startDate, self.$endDate, self.$sortOn, self.$sortOrder)
-                        .environment(\.managedObjectContext, self.managedObjectContext)
                 }
             }
             .navigationBarTitle(Text("Expense History"))
