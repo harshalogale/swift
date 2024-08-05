@@ -30,6 +30,8 @@ import SwiftUI
     @Published var shouldShowConversionDetails: Bool = false
     @Published var shouldShowWarningMessage: Bool = false
     @Published var focusedField: Field?
+    @Published var shouldShowDocsWebBrowser: Bool = false
+    @Published var shouldShowTermsWebBrowser: Bool = false
     let docsUrl = "https://www.exchangerate-api.com/docs"
     let termsUrl = "https://www.exchangerate-api.com/terms"
 
@@ -104,10 +106,18 @@ import SwiftUI
     func toolbarDoneButtonTapped() {
         focusedField = nil
     }
-    
+
+    func toolbarDocsButtonTapped() {
+        shouldShowDocsWebBrowser = true
+    }
+
+    func toolbarTermsButtonTapped() {
+        shouldShowTermsWebBrowser = true
+    }
+
     func onAppear() {
-        fromCode = Locale.current.currency?.identifier ?? "INR"
-        toCode = Locale.current.currency?.identifier ?? "INR"
+        fromCode = fromCode.isEmpty ? (Locale.current.currency?.identifier ?? "INR") : fromCode
+        toCode = toCode.isEmpty ? (Locale.current.currency?.identifier ?? "INR") : toCode
     }
     
     func setFromCode(newValue: String) {

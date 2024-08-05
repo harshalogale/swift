@@ -11,7 +11,7 @@ import SwiftUI
 struct ExchangeRateApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: ContentViewModel(supportedCurrenciesFileName: "supported_currencies"))
+            ContentView(viewModel: ContentViewModel(currenciesFileName: "supported_currencies"))
         }
     }
 }

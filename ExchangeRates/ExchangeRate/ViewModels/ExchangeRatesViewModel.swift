@@ -15,6 +15,8 @@ import Combine
     @Published var lastUpdate: TimeInterval?
     @Published var nextUpdate: TimeInterval?
     @Published var currencyCode: String = Locale.current.currency?.identifier ?? "USD"
+    @Published var shouldShowDocsWebBrowser: Bool = false
+    @Published var shouldShowTermsWebBrowser: Bool = false
     let docsUrl = "https://www.exchangerate-api.com/docs"
     let termsUrl = "https://www.exchangerate-api.com/terms"
 
@@ -37,9 +39,17 @@ import Combine
                 self?.exchangeRates = response?.conversionRates ?? [:]
             }
     }
-    
+
     /// Fetches exchange rates list for the newly selected currency code.
     func currencySelected() {
         fetchExchangeRates(for: currencyCode)
+    }
+
+    func toolbarDocsButtonTapped() {
+        shouldShowDocsWebBrowser = true
+    }
+
+    func toolbarTermsButtonTapped() {
+        shouldShowTermsWebBrowser = true
     }
 }

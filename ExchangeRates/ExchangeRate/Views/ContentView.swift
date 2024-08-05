@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     private var viewModel: ContentViewModel
+    @StateObject private var conversionRateViewModel = ConversionRateViewModel(webService: ERWebService())
+    @StateObject private var exchangeRatesViewModel = ExchangeRatesViewModel(webService: ERWebService())
 
     init(viewModel: ContentViewModel) {
         self.viewModel = viewModel
@@ -17,29 +19,29 @@ struct ContentView: View {
     var body: some View {
         TabView {
             NavigationStack {
-                ScrollView {
-                    ConversionRateView(viewModel: ConversionRateViewModel(webService: ERWebService()))
-                }
+                ConversionRateView(viewModel: conversionRateViewModel)
             }
             .tabItem {
                 Label("Conversion Rate", systemImage: "arrow.forward")
             }
+            .accessibilityLabel("Conversion Rate Tab")
+            .accessibilityIdentifier("conversionRateTabItem")
             NavigationStack {
-                ScrollView {
-                    ExchangeRatesView(viewModel: ExchangeRatesViewModel(webService: ERWebService()))
-                }
+                ExchangeRatesView(viewModel: exchangeRatesViewModel)
             }
             .tabItem {
                 Label("Exchange Rates", systemImage: "list.bullet.rectangle.portrait")
             }
+            .accessibilityLabel("Exchange Rates Tab")
+            .accessibilityIdentifier("exchangeRatesTabItem")
         }
         .task {
-            await viewModel.populateSupportedCurrencies()
+            await viewModel.populateCurrencies()
         }
         .environmentObject(viewModel.currencyList)
     }
 }
 
 #Preview {
-    ContentView(viewModel: ContentViewModel(supportedCurrenciesFileName: ""))
+    ContentView(viewModel: ContentViewModel(currenciesFileName: "supported_currencies"))
 }

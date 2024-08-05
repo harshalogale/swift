@@ -8,7 +8,7 @@
 import Foundation
 
 /// Holds the details of a supported currency.
-struct SupportedCurrency: Codable, Hashable, Identifiable {
+struct Currency: Codable, Hashable, Identifiable, Comparable {
     var id: String {
         currencyCode
     }
@@ -16,30 +16,50 @@ struct SupportedCurrency: Codable, Hashable, Identifiable {
     var currencyCode: String
     var currencyName: String
     var country: String
+
+    static func < (lhs: Currency, rhs: Currency) -> Bool {
+        lhs.currencyCode == rhs.currencyCode
+    }
 }
 
 /// Holds the list of supported currencies.
 class CurrencyList: ObservableObject {
-    var supportedCurrencies: [SupportedCurrency] = []
+    var currencies: [Currency] = [] {
+        didSet {
+            print(Self.self, "currencies didSet")
+            dictionary.removeAll()
+            currencies.forEach {
+                dictionary[$0.currencyCode] = $0
+            }
+        }
+    }
+    private var dictionary: Dictionary<String, Currency> = [:]
+
+    subscript(currencyCode: String) -> Currency? {
+        get {
+            dictionary[currencyCode]
+        }
+    }
 }
 
 /// Powers the Content view.
+@MainActor
 final class ContentViewModel: ObservableObject {
-    private var supportedCurrenciesFileName: String
+    private var currenciesFileName: String
     @Published var currencyList = CurrencyList()
     
-    init(supportedCurrenciesFileName: String) {
-        self.supportedCurrenciesFileName = supportedCurrenciesFileName
+    init(currenciesFileName: String) {
+        self.currenciesFileName = currenciesFileName
     }
     
-    func populateSupportedCurrencies() async {
+    func populateCurrencies() async {
         guard
-            let url = Bundle.main.url(forResource: supportedCurrenciesFileName, withExtension: "json"),
+            let url = Bundle.main.url(forResource: currenciesFileName, withExtension: "json"),
             let data = try? Data(contentsOf: url),
-            let supportedCurrencies = try? JSONDecoder().decode([SupportedCurrency].self, from: data)
+            let currencies = try? JSONDecoder().decode([Currency].self, from: data)
         else {
             return
         }
-        currencyList.supportedCurrencies = supportedCurrencies
+        currencyList.currencies = currencies.sorted()
     }
 }
