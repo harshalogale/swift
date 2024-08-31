@@ -7,14 +7,12 @@
 
 import SwiftUI
 import CashTrackerShared
+import CoreData
 
 
 struct ExpenseAnalysisContainer: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
-
-    @FetchRequest(fetchRequest: Credit.creditsFetchRequest()) var credits: FetchedResults<Credit>
-
-    @FetchRequest(fetchRequest: Expense.expensesFetchRequest()) var expenses: FetchedResults<Expense>
+    @FetchRequest(fetchRequest: Credit.creditsFetchRequest()) private var credits: FetchedResults<Credit>
+    @FetchRequest(fetchRequest: Expense.expensesFetchRequest()) private var expenses: FetchedResults<Expense>
     
     // listen for UIScene app-became-active notification
     private let pub = NotificationCenter.default
@@ -25,16 +23,17 @@ struct ExpenseAnalysisContainer: View {
     var body: some View {
         VStack {
             // dummy if-else to force app refresh when notification is received
-            if self.forceRefresh {
+            if forceRefresh {
                 EmptyView()
             } else {
                 EmptyView()
             }
-            ExpenseAnalysis(credits: credits, expenses: expenses)
+            ExpenseAnalysis(credits: credits,
+                            expenses: expenses)
         }
         .onReceive(pub, perform: { (_) in
             // update a state variable to force UI refresh
-            self.forceRefresh.toggle()
+            forceRefresh.toggle()
         })
     }
 }
@@ -69,7 +68,8 @@ struct ExpenseAnalysis: View {
         }
     }
     
-    init(credits:FetchedResults<Credit>, expenses:FetchedResults<Expense>) {
+    init(credits: FetchedResults<Credit>,
+         expenses: FetchedResults<Expense>) {
         self.credits = credits.compactMap( { $0 } )
         self.expenses = expenses.compactMap( { $0 } )
         
@@ -77,7 +77,7 @@ struct ExpenseAnalysis: View {
         
         for (index, (catName, groupExp)) in expByCategory!.enumerated() {
             let node = Node(name: catName!,
-                            value: Double(groupExp.map({ $0.amount }).reduce(0, +)),
+                            value: groupExp.map { $0.amount }.reduce(0, +),
                             backgroundColor: ExpenseAnalysis.graphColors[index % ExpenseAnalysis.graphColors.count])
             chartConfig.nodes.append(node)
         }
@@ -124,7 +124,7 @@ struct ExpenseAnalysis: View {
                             HStack {
                                 Text("\(exp.title ?? "no title")").padding(.leading, 10)
                                 Spacer()
-                                Text(CashTrackerSharedHelper.currencyFormatter.string(from:exp.amount as NSNumber) ?? "").padding(.trailing, 10)
+                                Text(CashTrackerSharedHelper.currencyFormatter.string(from: exp.amount as NSNumber) ?? "").padding(.trailing, 10)
                             }
                         }
                     }
@@ -137,6 +137,6 @@ struct ExpenseAnalysis: View {
                 }
             }
         }
-        .navigationBarTitle(Text("Expense Analysis"))
+        .navigationTitle(Text("Expense Analysis"))
     }
 }

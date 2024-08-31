@@ -12,22 +12,23 @@ import MessageUI
 import CashTrackerShared
 
 struct ExpenseExport: View {
-    var expenses:[Expense]
-    var credits:[Credit]
+    private var expenses:[Expense]
+    private var credits:[Credit]
     
-    @State var result: Result<MFMailComposeResult, Error>? = nil
-    @State var isShowingActivityView = false
-    @State var isShowingMailView = false
-    @State var isShowingAlertNoEmail = false
-    @State var isShowingAlertNoData = false
-    @State var reportExp: Data? = nil
-    @State var reportCash: Data? = nil
+    @State private var result: Result<MFMailComposeResult, Error>? = nil
+    @State private var isShowingActivityView = false
+    @State private var isShowingMailView = false
+    @State private var isShowingAlertNoEmail = false
+    @State private var isShowingAlertNoData = false
+    @State private var reportExp: Data? = nil
+    @State private var reportCash: Data? = nil
     
-    @State var resultMail: Result<MFMailComposeResult, Error>?
+    @State private var resultMail: Result<MFMailComposeResult, Error>?
     
-    @State var filesToShare = [Any]()
+    @State private var filesToShare = [Any]()
     
-    init(_ expenses:[Expense], _ credits:[Credit]) {
+    init(_ expenses:[Expense],
+         _ credits:[Credit]) {
         self.expenses = expenses
         self.credits = credits
     }
@@ -69,11 +70,11 @@ struct ExpenseExport: View {
         }
         
         if filesToShare.isEmpty {
-            self.isShowingAlertNoData = true
+            isShowingAlertNoData = true
         } else {
             // show ActivityViewController to allow the user to
             // appropriately handle the generated CSV report files
-            self.isShowingActivityView = true
+            isShowingActivityView = true
         }
     }
     
@@ -83,12 +84,12 @@ struct ExpenseExport: View {
         
         if nil != reportExp || nil != reportCash {
             if (MFMailComposeViewController.canSendMail()) {
-                self.isShowingMailView = true
+                isShowingMailView = true
             } else {
-                self.isShowingAlertNoEmail = true
+                isShowingAlertNoEmail = true
             }
         } else {
-            self.isShowingAlertNoData = true
+            isShowingAlertNoData = true
         }
     }
     
@@ -96,7 +97,7 @@ struct ExpenseExport: View {
         VStack {
             HStack {
                 Button(action: {
-                    self.exportReportToCSV()
+                    exportReportToCSV()
                 }) {
                     HStack {
                         Image(systemName: "arrow.up.doc.fill")
@@ -110,15 +111,15 @@ struct ExpenseExport: View {
                 .padding()
                 .padding(.top, 40)
                 .popover(isPresented: $isShowingActivityView) {
-                    ActivityViewController(isShowing: self.$isShowingActivityView,
-                                           filesToShare: self.filesToShare)
+                    ActivityViewController(isShowing: $isShowingActivityView,
+                                           filesToShare: filesToShare)
                 }
                 Spacer()
             }
             
             HStack {
                 Button(action: {
-                    self.mailReportCSV()
+                    mailReportCSV()
                 }) {
                     HStack {
                         Image(systemName: "envelope.fill")
@@ -132,22 +133,20 @@ struct ExpenseExport: View {
                 .padding()
                 .disabled(!MFMailComposeViewController.canSendMail())
                 .sheet(isPresented: $isShowingMailView) {
-                    MailView(isShowing: self.$isShowingMailView,
-                             result: self.$resultMail,
-                             exp: self.reportExp,
-                             cash: self.reportCash)
+                    MailView(isShowing: $isShowingMailView,
+                             result: $resultMail,
+                             exp: reportExp,
+                             cash: reportCash)
                 }
                 Spacer()
             }
             
             Spacer()
         }
-        .navigationBarTitle(Text("Export Report"))
+        .navigationTitle(Text("Export Report"))
     }
 }
 
-struct ExpenseExport_Previews: PreviewProvider {
-    static var previews: some View {
-        ExpenseExport([], [])
-    }
+#Preview {
+    ExpenseExport([], [])
 }

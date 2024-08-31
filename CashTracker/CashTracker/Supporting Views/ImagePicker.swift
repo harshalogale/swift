@@ -19,7 +19,7 @@ final class ImagePicker: ObservableObject {
     let view = ImagePicker.View()
     let coordinator = ImagePicker.Coordinator()
     
-    static var pickerType:UIImagePickerController.SourceType = .photoLibrary
+    static var pickerType: UIImagePickerController.SourceType = .photoLibrary
     
     // Bindable Object part
     let willChange = PassthroughSubject<(Image?, Data?), Never>()
@@ -45,11 +45,11 @@ extension ImagePicker {
             uiImage = fixOrientation(img: uiImage)
             
             ImagePicker.shared.imageInfo = (Image(uiImage: uiImage), uiImage.pngData())
-            picker.dismiss(animated:true)
+            picker.dismiss(animated: true)
         }
         
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            picker.dismiss(animated:true)
+            picker.dismiss(animated: true)
         }
         
         func fixOrientation(img: UIImage) -> UIImage {
@@ -92,17 +92,15 @@ extension ImagePicker {
 
 
 struct ImagePickerTestView: View {
-    
-    @State var showingPicker = false
-    
-    @State var image: Image? = nil
-    @State var imageData: Data? = nil
+    @State private var showingPicker = false
+    @State private var image: Image? = nil
+    @State private var imageData: Data? = nil
     // you could use ImagePicker.shared.image directly
     
     var body: some View {
         VStack {
             Button("Show Image Picker") {
-                self.showingPicker = true
+                showingPicker = true
             }
             
             if nil != image {
@@ -113,7 +111,7 @@ struct ImagePickerTestView: View {
                         .frame(width: 300)
                     
                     Button(action: {
-                        self.image  =  nil
+                        image  =  nil
                     }) {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.green)
@@ -128,8 +126,8 @@ struct ImagePickerTestView: View {
             .onReceive(ImagePicker.shared.$imageInfo) { imageInfo in
                 // This gets called when the image is picked.
                 // sheet/onDismiss gets called when the picker completely leaves the screen
-                self.image = imageInfo?.0
-                self.imageData = imageInfo?.1
+                image = imageInfo?.0
+                imageData = imageInfo?.1
         }
     }
     
@@ -137,10 +135,7 @@ struct ImagePickerTestView: View {
 
 
 #if DEBUG
-struct ImagePicker_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        ImagePickerTestView()
-    }
+#Preview {
+    ImagePickerTestView()
 }
 #endif

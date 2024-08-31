@@ -57,14 +57,14 @@ struct ExpenseHistory: View {
                     Text("Expense List").font(.headline).padding(.leading, 10)
                     
                     // dummy if-else to force app refresh when notification is received
-                    if self.forceRefresh {
+                    if forceRefresh {
                         Spacer()
                     } else {
                         Spacer()
                     }
                     
                     Button(action: {
-                        self.showingSortFilter = true
+                        showingSortFilter = true
                     }) {
                         HStack {
                             Image(systemName: "arrow.up.arrow.down.circle.fill")
@@ -76,42 +76,39 @@ struct ExpenseHistory: View {
                             Text("Sort/Filter")
                         }
                     }
-                    .sheet(isPresented: self.$showingSortFilter, content: {
-                        SortFilterView(startDate: self.$startDate,
-                                       endDate: self.$endDate,
-                                       sortOrder: self.$sortOrder,
-                                       sortOn: self.$sortOn,
-                                       sortableColumns: self.$sortableColumns)
+                    .sheet(isPresented: $showingSortFilter, content: {
+                        SortFilterView(startDate: $startDate,
+                                       endDate: $endDate,
+                                       sortOrder: $sortOrder,
+                                       sortOn: $sortOn,
+                                       sortableColumns: $sortableColumns)
                     })
                     
                     Button(action: {
-                        self.editMode?.wrappedValue = .active == self.editMode?.wrappedValue ? .inactive: .active
+                        editMode?.wrappedValue = .active == editMode?.wrappedValue ? .inactive: .active
                     }) {
                         HStack {
-                            Image(systemName: .active == self.editMode?.wrappedValue ? "pencil.circle": "pencil.circle.fill")
+                            Image(systemName: .active == editMode?.wrappedValue ? "pencil.circle": "pencil.circle.fill")
                                 .foregroundColor(.orange)
                                 .imageScale(.large)
-                            Text(.active == self.editMode?.wrappedValue ? "Done": "Edit")
+                            Text(.active == editMode?.wrappedValue ? "Done": "Edit")
                         }
                     }.padding(.horizontal, 10)
                 }
             ) {
                 withAnimation(.linear(duration: 0.6)) {
-                    ExpenseList(self.$startDate, self.$endDate, self.$sortOn, self.$sortOrder)
+                    ExpenseList($startDate, $endDate, $sortOn, $sortOrder)
                 }
             }
-            .navigationBarTitle(Text("Expense History"))
+            .navigationTitle(Text("Expense History"))
         }
         .onReceive(pub, perform: { (_) in
             // update a state variable to force UI refresh
-            self.forceRefresh.toggle()
+            forceRefresh.toggle()
         })
     }
 }
 
-struct ExpenseHistory_Previews: PreviewProvider {
-    static var previews: some View {
-        ExpenseHistory().environment(\.locale, Locale(identifier: "hi"))
-            .previewDevice(PreviewDevice(rawValue: "iPhone SE"))
-    }
+#Preview {
+    ExpenseHistory().environment(\.locale, Locale(identifier: "hi"))
 }

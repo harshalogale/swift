@@ -11,8 +11,8 @@ import CashTrackerShared
 
 struct CreditEntry: View {
     @Environment(\.managedObjectContext) var managedObjectContext
-    @Environment(\.presentationMode) var presentationMode
-    
+    @Environment(\.dismiss) var dismiss
+
     @State private var title: String
     @State private var amt: String
     @State private var currencyCode: String
@@ -45,10 +45,10 @@ struct CreditEntry: View {
 //        }
 //    }
     
-    init(_ credit:Binding<Credit?>) {
+    init(_ credit: Binding<Credit?>) {
         self.credit = credit
         
-        let cred = self.credit.wrappedValue
+        let cred = credit.wrappedValue
         
         _title = State(initialValue: cred?.title ?? "")
         _dt = State(initialValue: cred?.datetime ?? Date())
@@ -92,7 +92,7 @@ struct CreditEntry: View {
                 }
                 HStack {
                     Button(action: {
-                        self.presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }) {
                         Image(systemName: "text.badge.xmark")
                             .imageScale(.large)
@@ -109,40 +109,40 @@ struct CreditEntry: View {
                     Spacer()
                     
                     Button(action: {
-                        let cred = self.credit.wrappedValue ?? Credit(context: self.managedObjectContext)
-                        cred.id = self.credit.wrappedValue?.id ?? UUID()
-                        cred.title = self.title.isEmpty ? "New Cash": self.title
+                        let cred = credit.wrappedValue ?? Credit(context: managedObjectContext)
+                        cred.id = credit.wrappedValue?.id ?? UUID()
+                        cred.title = title.isEmpty ? "New Cash": title
                         
-                        if let doubleAmt = Double(self.amt) {
+                        if let doubleAmt = Double(amt) {
                             cred.amount = doubleAmt
                         }
-                        cred.currencyCode = self.currencyCode
-                        cred.datetime = self.dt
-                        cred.notes = self.notes
+                        cred.currencyCode = currencyCode
+                        cred.datetime = dt
+                        cred.notes = notes
                         
                         do {
-                            try self.managedObjectContext.save()
+                            try managedObjectContext.save()
                         } catch {
                             print(error)
                         }
                         
-                        self.presentationMode.wrappedValue.dismiss()
+                        dismiss()
                         
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            self.dt = Date()
-                            self.title = ""
-                            self.amt = "0.0"
-                            self.notes = ""
+                            dt = Date()
+                            title = ""
+                            amt = "0.0"
+                            notes = ""
                         }
                     }) {
                         HStack {
-                            Image(systemName: nil != self.credit.wrappedValue ? "pencil.circle.fill": "plus.circle.fill")
-                                .foregroundColor(self.title.isEmpty && 0 == (Double(self.amt) ?? 0) ? .gray: .green)
+                            Image(systemName: nil != credit.wrappedValue ? "pencil.circle.fill": "plus.circle.fill")
+                                .foregroundColor(title.isEmpty && 0 == (Double(amt) ?? 0) ? .gray: .green)
                                 .imageScale(.large)
-                            Text(nil != self.credit.wrappedValue ? "Update":  "Add").font(.headline).bold()
+                            Text(nil != credit.wrappedValue ? "Update":  "Add").font(.headline).bold()
                         }
-                    }.disabled(self.title.isEmpty && 0 == (Double(self.amt) ?? 0))
-                        .opacity((self.title.isEmpty && 0 == (Double(self.amt) ?? 0)) ? 0.3: 1.0)
+                    }.disabled(title.isEmpty && 0 == (Double(amt) ?? 0))
+                        .opacity((title.isEmpty && 0 == (Double(amt) ?? 0)) ? 0.3: 1.0)
                 }
             }) {
                 HStack {
@@ -174,7 +174,7 @@ struct CreditEntry: View {
                     }
                     Spacer()
                     Button(action: {
-                        self.showCreditDatePicker = true
+                        showCreditDatePicker = true
                     }){
                         HStack {
                             Image(systemName: "calendar")
@@ -182,8 +182,8 @@ struct CreditEntry: View {
                                 .imageScale(.large)
                             Text("Select Date")
                         }
-                    }.sheet(isPresented: self.$showCreditDatePicker, content: {
-                        DatePickerView("Select Date", self.$dt)
+                    }.sheet(isPresented: $showCreditDatePicker, content: {
+                        DatePickerView("Select Date", $dt)
                     })
                     Spacer()
                 }
@@ -197,9 +197,9 @@ struct CreditEntry: View {
                 }
             }.onPreferenceChange(CenteringColumnPreferenceKey.self) { preferences in
                 for p in preferences {
-                    let oldWidth = self.width ?? CGFloat.zero
+                    let oldWidth = width ?? CGFloat.zero
                     if p.width > oldWidth {
-                        self.width = p.width
+                        width = p.width
                     }
                 }
             }

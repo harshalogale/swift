@@ -10,9 +10,6 @@ import Combine
 import CashTrackerShared
 
 struct SettingsView: View {
-    
-    @Environment(\.managedObjectContext) var managedObjectContext
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var settings: UserSettings
     
     // NOTE: !!! App crashes if an excessively long data set is used for Picker !!!
@@ -64,13 +61,13 @@ struct SettingsView: View {
                 SiriShortcuts()
             }
         }
-        .navigationBarTitle("Settings")
+        .navigationTitle("Settings")
     }
 }
 
 
 struct CurrencyPickerView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss
     
     @Binding var selectedCurrency: String
     
@@ -87,7 +84,7 @@ struct CurrencyPickerView: View {
                         .bold()
                     
                     Spacer()
-                    if currency == self.selectedCurrency {
+                    if currency == selectedCurrency {
                         Image(systemName: "checkmark")
                             .foregroundColor(.gray)
                             .imageScale(.large)
@@ -95,9 +92,9 @@ struct CurrencyPickerView: View {
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    self.selectedCurrency = currency
+                    selectedCurrency = currency
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        self.presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                 }
             }
@@ -105,17 +102,14 @@ struct CurrencyPickerView: View {
     }
 }
 
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView().environmentObject(UserSettings())
-    }
+#Preview {
+    SettingsView()
+        .environmentObject(UserSettings())
 }
 
-struct CurrencyPickerView_Previews: PreviewProvider {
-    static var previews: some View {
-        CurrencyPickerView(
-            selectedCurrency: .constant("CHF"),
-            currencies: CashTrackerSharedHelper.currencies)
-            .environmentObject(UserSettings())
-    }
+#Preview {
+    CurrencyPickerView(
+        selectedCurrency: .constant("CHF"),
+        currencies: CashTrackerSharedHelper.currencies)
+    .environmentObject(UserSettings())
 }

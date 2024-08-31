@@ -21,18 +21,21 @@ struct ExpenseList: View {
     private var expensesRequest: FetchRequest<Expense>
     private var expenses: FetchedResults<Expense> { expensesRequest.wrappedValue }
     
-    init(_ from:Binding<Date>, _ to:Binding<Date>, _ sortOn: Binding<String>, _ sortOrder: Binding<SortListView.SortOrder>) {
+    init(_ from: Binding<Date>,
+         _ to: Binding<Date>,
+         _ sortOn: Binding<String>,
+         _ sortOrder: Binding<SortListView.SortOrder>) {
         self.fromDate = from
         self.toDate = to
         self.sortOn = sortOn
         self.sortOrder = sortOrder
         
-        self.expensesRequest = FetchRequest(
+        expensesRequest = FetchRequest<Expense>(
             entity: Expense.entity(),
-            sortDescriptors: [NSSortDescriptor(key: self.sortOn.wrappedValue, ascending: self.sortOrder.wrappedValue == SortListView.SortOrder.Ascending)],
+            sortDescriptors: [NSSortDescriptor(key: sortOn.wrappedValue, ascending: sortOrder.wrappedValue == SortListView.SortOrder.Ascending)],
             predicate: NSPredicate(format: "datetime >= %@ && datetime <= %@ && currencyCode like[c] %@",
-                                   self.fromDate.wrappedValue as NSDate,
-                                   self.toDate.wrappedValue as NSDate,
+                                   fromDate.wrappedValue as NSDate,
+                                   toDate.wrappedValue as NSDate,
                                    CashTrackerSharedHelper.currencyCode))
     }
     
@@ -59,13 +62,13 @@ struct ExpenseList: View {
                     .onDelete { (indexSet) in // Delete gets triggered by swiping left on a row
                         // ❇️ Gets the Expense instance out of the result expenses array
                         // ❇️ and deletes it using the @Environment's managedObjectContext
-                        let expenseToDelete = self.expenses[indexSet.first!]
-                        self.managedObjectContext.delete(expenseToDelete)
+                        let expenseToDelete = expenses[indexSet.first!]
+                        managedObjectContext.delete(expenseToDelete)
                         
                         // Note: !! App crashes without this delay !!
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                             do {
-                                try self.managedObjectContext.save()
+                                try managedObjectContext.save()
                             } catch {
                                 print(error)
                             }
@@ -74,4 +77,14 @@ struct ExpenseList: View {
             }
         }
     }
+}
+
+#Preview {
+    ExpenseList(
+        .constant(Date().addingTimeInterval(-36000)),
+        .constant(Date()),
+        .constant("datetime"),
+        .constant(SortListView.SortOrder.Descending)
+    )
+    .environment(\.managedObjectContext, CashTrackerSharedHelper.persistentContainer.viewContext)
 }

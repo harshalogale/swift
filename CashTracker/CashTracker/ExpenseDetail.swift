@@ -10,17 +10,15 @@ import SwiftUI
 import CashTrackerShared
 
 struct ExpenseDetail: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
-    
-    @State var expense: Expense!
+    @State private var expense: Expense!
     
     @State private var isExpenseEditFormVisible = false
     @State private var isImagePopupVisible = false
     
-    @State var lastScaleValue: CGFloat = 1.0
-    @State var scale: CGFloat = 1.0
+    @State private var lastScaleValue: CGFloat = 1.0
+    @State private var scale: CGFloat = 1.0
     
-    init(_ expense:Expense) {
+    init(_ expense: Expense) {
         _expense = State(initialValue: expense)
     }
     
@@ -32,40 +30,40 @@ struct ExpenseDetail: View {
                 .overlay(
                     CircleImage(image: expense.image)
                         .contentShape(Circle())
-                        .onTapGesture() { self.isImagePopupVisible.toggle() }
+                        .onTapGesture() { isImagePopupVisible.toggle() }
                         .offset(x: 0, y: 200)
                         .padding(.bottom, 100)
-            )
-                .popover(isPresented: self.$isImagePopupVisible,
+                )
+                .popover(isPresented: $isImagePopupVisible,
                          arrowEdge: .bottom) {
-                            VStack {
-                                Spacer()
-                                self.expense?.image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .scaleEffect(self.scale)
-                                Spacer()
-                            }
-                            .contentShape(Rectangle())
-                            .gesture(MagnificationGesture()
-                            .onChanged { val in
-                                let delta = val / self.lastScaleValue
-                                self.lastScaleValue = val
-                                let newScale = self.scale * delta
-                                
-                                // clamp image scale factor
-                                self.scale = min(2.0, newScale)
-                                self.scale = max(0.5, newScale)
-                            }
-                            .onEnded { val in
-                                // without this the next gesture will be broken
-                                self.lastScaleValue = 1.0
-                            })
-                                .gesture(TapGesture(count: 2)
-                                    .onEnded({ () in
-                                        self.scale = 1.0
-                                    }))
-            }
+                    VStack {
+                        Spacer()
+                        expense?.image
+                            .resizable()
+                            .scaledToFit()
+                            .scaleEffect(scale)
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                    .gesture(MagnificationGesture()
+                        .onChanged { val in
+                            let delta = val / lastScaleValue
+                            lastScaleValue = val
+                            let newScale = scale * delta
+
+                            // clamp image scale factor
+                            scale = min(2.0, newScale)
+                            scale = max(0.5, newScale)
+                        }
+                        .onEnded { val in
+                            // without this the next gesture will be broken
+                            lastScaleValue = 1.0
+                        })
+                    .gesture(TapGesture(count: 2)
+                        .onEnded({ () in
+                            scale = 1.0
+                        }))
+                }
             
             VStack(alignment: .leading) {
                 HStack {
@@ -82,17 +80,17 @@ struct ExpenseDetail: View {
                     }
                     .contentShape(Rectangle())
                     .onTapGesture() {
-                        self.isExpenseEditFormVisible.toggle()
+                        isExpenseEditFormVisible.toggle()
                     }
                     .padding(.horizontal, 10)
-                    .popover(isPresented: self.$isExpenseEditFormVisible,
+                    .popover(isPresented: $isExpenseEditFormVisible,
                              arrowEdge: .bottom) {
-                                ExpenseEntry(self.$expense)
+                        ExpenseEntry($expense)
                     }
                 }
                 
                 HStack {
-                    Text(CashTrackerSharedHelper.currencyFormatter.string(from:expense.amount as NSNumber) ?? "").font(.title)
+                    Text(CashTrackerSharedHelper.currencyFormatter.string(from: expense.amount as NSNumber) ?? "").font(.title)
                     Spacer()
                 }
                 
@@ -139,14 +137,10 @@ struct ExpenseDetail: View {
     }
 }
 
-//struct ExpenseDetail_Preview: PreviewProvider {
-//    static var previews: some View {
-//        let userData = UserData()
-//        return ExpenseDetail(expense: userData.expenses[0])
-//            .environmentObject(userData)
-//    }
-//}
-
+#Preview {
+    let context = CashTrackerSharedHelper.persistentContainer.viewContext
+    ExpenseDetail(Expense(context: context))
+}
 
 struct BlurView: UIViewRepresentable {
     var effect: UIBlurEffect.Style
@@ -159,6 +153,5 @@ struct BlurView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIVisualEffectView, context: UIViewRepresentableContext<BlurView>) {
-        
     }
 }

@@ -55,12 +55,12 @@ public class ExportReportIntentHandler: NSObject, ExportReportIntentHandling {
 //
 //        if nil != reportExp || nil != reportCash {
 //            if (MFMailComposeViewController.canSendMail()) {
-//                self.isShowingMailView = true
+//                isShowingMailView = true
 //            } else {
-//                self.isShowingAlertNoEmail = true
+//                isShowingAlertNoEmail = true
 //            }
 //        }  else {
-//            self.isShowingAlertNoData = true
+//            isShowingAlertNoData = true
 //        }
     }
 }

@@ -13,7 +13,7 @@ import IntentsUI
 
 struct ExpenseEntry: View {
    @Environment(\.managedObjectContext) var managedObjectContext
-   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+   @Environment(\.dismiss) var dismiss
    
    private var expense: Binding<Expense?>
    
@@ -47,7 +47,7 @@ struct ExpenseEntry: View {
    
    @State private var width: CGFloat? = nil
    
-   init(_ expense:Binding<Expense?>) {
+   init(_ expense: Binding<Expense?>) {
       self.expense = expense
       
       let exp = self.expense.wrappedValue
@@ -107,20 +107,20 @@ struct ExpenseEntry: View {
             }
             HStack {
                Button(action: {
-                  self.presentationMode.wrappedValue.dismiss()
+                  dismiss()
                   
                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                     self.dt = Date()
-                     self.title = ""
-                     self.amt = "0.0"
-                     self.business = ""
-                     self.address = ""
-                     self.notes = ""
-                     self.imageData = nil
-                     self.image = nil
+                     dt = Date()
+                     title = ""
+                     amt = "0.0"
+                     business = ""
+                     address = ""
+                     notes = ""
+                     imageData = nil
+                     image = nil
                      ImagePicker.shared.imageInfo = nil
-                     self.selectedCoordinates = nil
-                     self.category = nil
+                     selectedCoordinates = nil
+                     category = nil
                   }
                }) {
                   Image(systemName: "text.badge.xmark")
@@ -138,58 +138,58 @@ struct ExpenseEntry: View {
                Spacer()
                
                Button(action: {
-                  let exp = self.expense.wrappedValue ?? Expense(context: self.managedObjectContext)
-                  exp.id = self.expense.wrappedValue?.id ?? UUID()
-                  exp.title = self.title.isEmpty ? "New Expense": self.title
+                  let exp = expense.wrappedValue ?? Expense(context: managedObjectContext)
+                  exp.id = expense.wrappedValue?.id ?? UUID()
+                  exp.title = title.isEmpty ? "New Expense": title
                   
-                  if let doubleAmt = Double(self.amt) {
+                  if let doubleAmt = Double(amt) {
                      exp.amount = doubleAmt
                   }
                   
-                  exp.currencyCode = self.currencyCode
-                  exp.datetime = self.dt
-                  exp.business = self.business
-                  exp.address = self.address
-                  exp.notes = self.notes
-                  exp.category = self.category
-                  exp.imageData = self.imageData
-                  exp.latitude = self.selectedCoordinates?.latitude ?? 0
-                  exp.longitude = self.selectedCoordinates?.longitude ?? 0
+                  exp.currencyCode = currencyCode
+                  exp.datetime = dt
+                  exp.business = business
+                  exp.address = address
+                  exp.notes = notes
+                  exp.category = category
+                  exp.imageData = imageData
+                  exp.latitude = selectedCoordinates?.latitude ?? 0
+                  exp.longitude = selectedCoordinates?.longitude ?? 0
                   
                   do {
                      print("saving expense object")
-                     try self.managedObjectContext.save()
-                     if nil != self.expense.wrappedValue {
-                        self.expense.wrappedValue = exp
+                     try managedObjectContext.save()
+                     if nil != expense.wrappedValue {
+                        expense.wrappedValue = exp
                      }
                   } catch {
                      print(error)
                   }
                   
-                  self.presentationMode.wrappedValue.dismiss()
+                  dismiss()
                   
                   DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                     self.dt = Date()
-                     self.title = ""
-                     self.amt = "0.0"
-                     self.business = ""
-                     self.address = ""
-                     self.notes = ""
-                     self.imageData = nil
-                     self.image = nil
+                     dt = Date()
+                     title = ""
+                     amt = "0.0"
+                     business = ""
+                     address = ""
+                     notes = ""
+                     imageData = nil
+                     image = nil
                      ImagePicker.shared.imageInfo = nil
-                     self.selectedCoordinates = nil
-                     self.category = nil
+                     selectedCoordinates = nil
+                     category = nil
                   }
                }) {
                   HStack {
-                     Image(systemName: nil != self.expense.wrappedValue ? "pencil.circle.fill": "plus.circle.fill")
-                     //.foregroundColor(self.title.isEmpty && 0 == (Double(self.amt) ?? 0) ? .gray: .green)
+                     Image(systemName: nil != expense.wrappedValue ? "pencil.circle.fill": "plus.circle.fill")
+                     //.foregroundColor(title.isEmpty && 0 == (Double(amt) ?? 0) ? .gray: .green)
                         .foregroundColor(.green)
                         .imageScale(.large)
-                     Text(nil != self.expense.wrappedValue ? "Update":  "Add").font(.headline).bold()
+                     Text(nil != expense.wrappedValue ? "Update":  "Add").font(.headline).bold()
                   }
-               }.disabled(self.title.isEmpty && 0 == (Double(self.amt) ?? 0))
+               }.disabled(title.isEmpty && 0 == (Double(amt) ?? 0))
             }
          }
          ) {
@@ -234,7 +234,7 @@ struct ExpenseEntry: View {
                VStack {
                   Button(action: {
                      print("show map")
-                     self.showingLocationPicker = true
+                     showingLocationPicker = true
                   }) {
                      HStack {
                         Image(systemName: "map.fill")
@@ -245,14 +245,14 @@ struct ExpenseEntry: View {
                   }.sheet(isPresented: $showingLocationPicker) {
                      ZStack {
                         LocationPicker(onSelect: { (newCoord, name, addr) in
-                           self.selectedCoordinates = newCoord
-                           self.business = name
-                           self.address = addr
+                           selectedCoordinates = newCoord
+                           business = name
+                           address = addr
                         })
                            .edgesIgnoringSafeArea(.vertical)
                            .overlay(Button(action: {
                               print("hide map")
-                              self.showingLocationPicker = false
+                              showingLocationPicker = false
                            }, label: {
                               Image(systemName: "xmark.circle.fill")
                                  .foregroundColor(.gray)
@@ -291,7 +291,7 @@ struct ExpenseEntry: View {
                }
                Spacer()
                Button(action: {
-                  self.modalDisplayed1 = true
+                  modalDisplayed1 = true
                }){
                   HStack {
                      Image(systemName: "calendar")
@@ -299,8 +299,8 @@ struct ExpenseEntry: View {
                         .imageScale(.large)
                      Text("Select Date")
                   }
-               }.sheet(isPresented: self.$modalDisplayed1, content: {
-                  DatePickerView("Select Date", self.$dt)
+               }.sheet(isPresented: $modalDisplayed1, content: {
+                  DatePickerView("Select Date", $dt)
                })
                Spacer()
             }
@@ -317,15 +317,15 @@ struct ExpenseEntry: View {
                      .imageScale(.large)
                   Text("Photo Library")
                }.onTapGesture {
-                  self.showingImagePicker = true
+                  showingImagePicker = true
                   ImagePicker.pickerType = UIImagePickerController.SourceType.photoLibrary
                }.sheet(isPresented: $showingImagePicker, content: {
                   ImagePicker.shared.view
                }).onReceive(ImagePicker.shared.$imageInfo) { imageInfo in
                   // This gets called when the image is picked.
                   // sheet/onDismiss gets called when the picker completely leaves the screen
-                  self.image = imageInfo?.0
-                  self.imageData = imageInfo?.1
+                  image = imageInfo?.0
+                  imageData = imageInfo?.1
                }
                
                Spacer()
@@ -337,15 +337,15 @@ struct ExpenseEntry: View {
                         .imageScale(.large)
                      Text("Camera")
                   }.onTapGesture {
-                     self.showingCameraPicker = true
+                     showingCameraPicker = true
                      ImagePicker.pickerType = UIImagePickerController.SourceType.camera
                   }.sheet(isPresented: $showingCameraPicker, content: {
                      ImagePicker.shared.view
                   }).onReceive(ImagePicker.shared.$imageInfo) { imageInfo in
                      // This gets called when the image is picked.
                      // sheet/onDismiss gets called when the picker completely leaves the screen
-                     self.image = imageInfo?.0
-                     self.imageData = imageInfo?.1
+                     image = imageInfo?.0
+                     imageData = imageInfo?.1
                   }
                   Spacer()
                }
@@ -363,8 +363,8 @@ struct ExpenseEntry: View {
                      .overlay(
                         Button(action: {
                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                              self.image = nil
-                              self.imageData = nil
+                              image = nil
+                              imageData = nil
                            }
                         }) {
                            Image(systemName: "xmark.circle.fill")
@@ -377,9 +377,9 @@ struct ExpenseEntry: View {
             }
          }.onPreferenceChange(CenteringColumnPreferenceKey.self) { preferences in
             for p in preferences {
-               let oldWidth = self.width ?? CGFloat.zero
+               let oldWidth = width ?? CGFloat.zero
                if p.width > oldWidth {
-                  self.width = p.width
+                  width = p.width
                }
             }
          }

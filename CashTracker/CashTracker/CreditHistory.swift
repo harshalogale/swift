@@ -11,7 +11,6 @@ import IntentsUI
 import CashTrackerShared
 
 struct CreditHistory: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.editMode) var editMode
     
     @State private var showingSortFilter = false
@@ -59,14 +58,14 @@ struct CreditHistory: View {
                     Text("Credit List").font(.headline).padding(.leading, 10)
                     
                     // dummy if-else to force app refresh when notification is received
-                    if self.forceRefresh {
+                    if forceRefresh {
                         Spacer()
                     } else {
                         Spacer()
                     }
                     
                     Button(action: {
-                        self.showingSortFilter = true
+                        showingSortFilter = true
                     }) {
                         HStack {
                             Image(systemName: "arrow.up.arrow.down.circle.fill")
@@ -78,34 +77,34 @@ struct CreditHistory: View {
                             Text("Sort/Filter")
                         }
                     }
-                    .sheet(isPresented: self.$showingSortFilter, content: {
-                        SortFilterView(startDate: self.$startDate,
-                                       endDate: self.$endDate,
-                                       sortOrder: self.$sortOrder,
-                                       sortOn: self.$sortOn,
-                                       sortableColumns: self.$sortableColumns)
+                    .sheet(isPresented: $showingSortFilter, content: {
+                        SortFilterView(startDate: $startDate,
+                                       endDate: $endDate,
+                                       sortOrder: $sortOrder,
+                                       sortOn: $sortOn,
+                                       sortableColumns: $sortableColumns)
                     })
                     
                     Button(action: {
-                        self.editMode?.wrappedValue = .active == self.editMode?.wrappedValue ? .inactive: .active
+                        editMode?.wrappedValue = .active == editMode?.wrappedValue ? .inactive: .active
                     }) {
                         HStack {
-                            Image(systemName: .active == self.editMode?.wrappedValue ? "pencil.circle": "pencil.circle.fill")
+                            Image(systemName: .active == editMode?.wrappedValue ? "pencil.circle": "pencil.circle.fill")
                                 .foregroundColor(.orange)
                                 .imageScale(.large)
-                            Text(.active == self.editMode?.wrappedValue ? "Done": "Edit")
+                            Text(.active == editMode?.wrappedValue ? "Done": "Edit")
                         }
                     }.padding(.horizontal, 10)
                 }
             ) {
                 withAnimation(.linear(duration: 0.6)) {
-                    CashCreditList(self.$startDate, self.$endDate, self.$sortOn, self.$sortOrder)
+                    CashCreditList($startDate, $endDate, $sortOn, $sortOrder)
                 }
             }
-            .navigationBarTitle(Text("Cash Addition History"))
+            .navigationTitle(Text("Cash Addition History"))
             .onReceive(pub, perform: { (_) in
                 // update a state variable to force UI refresh
-                self.forceRefresh.toggle()
+                forceRefresh.toggle()
             })
         }
     }
@@ -123,18 +122,21 @@ struct CashCreditList: View {
     private var creditsRequest: FetchRequest<Credit>
     private var credits: FetchedResults<Credit> { creditsRequest.wrappedValue }
     
-    init(_ from:Binding<Date>, _ to:Binding<Date>, _ sortOn: Binding<String>, _ sortOrder: Binding<SortListView.SortOrder>) {
+    init(_ from: Binding<Date>,
+         _ to: Binding<Date>,
+         _ sortOn: Binding<String>,
+         _ sortOrder: Binding<SortListView.SortOrder>) {
         self.fromDate = from
         self.toDate = to
         self.sortOn = sortOn
         self.sortOrder = sortOrder
         
-        self.creditsRequest = FetchRequest(
+        creditsRequest = FetchRequest<Credit>(
             entity: Credit.entity(),
-            sortDescriptors: [NSSortDescriptor(key: self.sortOn.wrappedValue, ascending: self.sortOrder.wrappedValue == SortListView.SortOrder.Ascending)],
+            sortDescriptors: [NSSortDescriptor(key: sortOn.wrappedValue, ascending: sortOrder.wrappedValue == SortListView.SortOrder.Ascending)],
             predicate: NSPredicate(format: "datetime >= %@ && datetime <= %@ && currencyCode like[c] %@",
-                                   self.fromDate.wrappedValue as NSDate,
-                                   self.toDate.wrappedValue as NSDate,
+                                   fromDate.wrappedValue as NSDate,
+                                   toDate.wrappedValue as NSDate,
                                    CashTrackerSharedHelper.currencyCode))
     }
     
@@ -161,13 +163,13 @@ struct CashCreditList: View {
                     .onDelete { (indexSet) in // Delete gets triggered by swiping left on a row
                         // ❇️ Gets the Credit instance out of the result credits array
                         // ❇️ and deletes it using the @Environment's managedObjectContext
-                        let creditToDelete = self.credits[indexSet.first!]
-                        self.managedObjectContext.delete(creditToDelete)
+                        let creditToDelete = credits[indexSet.first!]
+                        managedObjectContext.delete(creditToDelete)
                         
                         // Note: !! App crashes without this delay !!
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                             do {
-                                try self.managedObjectContext.save()
+                                try managedObjectContext.save()
                             } catch {
                                 print(error)
                             }
@@ -176,6 +178,16 @@ struct CashCreditList: View {
             }
         }
     }
+}
+
+#Preview {
+    CashCreditList(
+        .constant(Date().addingTimeInterval(-36000)),
+        .constant(Date()),
+        .constant("datetime"),
+        .constant(SortListView.SortOrder.Descending)
+    )
+    .environment(\.managedObjectContext, CashTrackerSharedHelper.persistentContainer.viewContext)
 }
 
 struct CreditRow: View {
@@ -188,7 +200,7 @@ struct CreditRow: View {
                     Text(credit.title ?? "").font(.title)
                     Spacer()
                     
-                    Text(CashTrackerSharedHelper.currencyFormatter.string(from:credit.amount as NSNumber) ?? "").font(.title).padding(15)
+                    Text(CashTrackerSharedHelper.currencyFormatter.string(from: credit.amount as NSNumber) ?? "").font(.title).padding(15)
                 }
                 HStack {
                     Text((nil != credit.datetime ? DateFormatter.expDateTimeFormatter.string(from: credit.datetime!): ""))

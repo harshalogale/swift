@@ -10,13 +10,11 @@ import SwiftUI
 import CashTrackerShared
 
 struct CreditDetail: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
-    
-    @State var credit: Credit!
+    @State private var credit: Credit!
     
     @State private var isCreditEditFormVisible = false
     
-    init(_ credit:Credit) {
+    init(_ credit: Credit) {
         _credit = State(initialValue: credit)
     }
     
@@ -36,17 +34,17 @@ struct CreditDetail: View {
                 }
                 .contentShape(Rectangle())
                 .onTapGesture() {
-                    self.isCreditEditFormVisible.toggle()
+                    isCreditEditFormVisible.toggle()
                 }
                 .padding(.horizontal, 10)
-                .popover(isPresented: self.$isCreditEditFormVisible,
+                .popover(isPresented: $isCreditEditFormVisible,
                          arrowEdge: .bottom) {
-                            CreditEntry(self.$credit)
+                            CreditEntry($credit)
                 }
             }
             
             HStack {
-                Text(CashTrackerSharedHelper.currencyFormatter.string(from:credit!.amount as NSNumber) ?? "").font(.title)
+                Text(CashTrackerSharedHelper.currencyFormatter.string(from: credit!.amount as NSNumber) ?? "").font(.title)
                 Spacer()
             }
             
@@ -66,6 +64,11 @@ struct CreditDetail: View {
         }
         .padding()
         .padding(.top, 20)
-        .navigationBarTitle("Cash Addition Details")
+        .navigationTitle("Cash Addition Details")
     }
+}
+
+#Preview {
+    let context = CashTrackerSharedHelper.persistentContainer.viewContext
+    CreditDetail(Credit(context: context))
 }

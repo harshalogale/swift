@@ -16,7 +16,6 @@ public class RecentExpensesIntentHandler: NSObject, RecentExpensesIntentHandling
     // MARK: - Intents
     
     public func handle(intent: RecentExpensesIntent, completion: @escaping (RecentExpensesIntentResponse) -> Void) {
-        
         print("handle RecentExpensesIntent")
         
         let ctx = CashTrackerSharedHelper.persistentContainer.viewContext
@@ -30,7 +29,7 @@ public class RecentExpensesIntentHandler: NSObject, RecentExpensesIntentHandling
             print("Recent expenses:")
             
             for ex in recentExp {
-                let amtStr = CashTrackerSharedHelper.currencyFormatter.string(from:ex.amount as NSNumber) ?? "0.00"
+                let amtStr = CashTrackerSharedHelper.currencyFormatter.string(from: ex.amount as NSNumber) ?? "0.00"
                 let expStr = "\n\(ex.title!), \(amtStr)"
                 recent += expStr
                 print("\(ex.title!), \(ex.amount), (\(ex.latitude), \(ex.longitude))")
@@ -39,6 +38,6 @@ public class RecentExpensesIntentHandler: NSObject, RecentExpensesIntentHandling
             print (error)
         }
         
-        completion(RecentExpensesIntentResponse.success(expenses:recent))
+        completion(RecentExpensesIntentResponse.success(expenses: recent))
     }
 }

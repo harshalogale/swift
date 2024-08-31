@@ -9,10 +9,8 @@ import SwiftUI
 import MapKit
 
 struct LocationPicker: UIViewRepresentable {
-
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
-    @State var loc: CLLocation? = nil
+    @Environment(\.dismiss) var dismiss
+    @State private var loc: CLLocation? = nil
     var pin: CLLocationCoordinate2D? = nil
     let onSelect: ((CLLocationCoordinate2D, String, String) -> Void)
     
@@ -39,15 +37,15 @@ struct LocationPicker: UIViewRepresentable {
     func updateUIView(_ view: MKMapView, context: Context) {
 
         let coordinator = context.coordinator
-        if let loc = self.loc, loc != coordinator.lastCenterLocation {
+        if let loc, loc != coordinator.lastCenterLocation {
             let coordinate = loc.coordinate
             let span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
             let region = MKCoordinateRegion(center: coordinate, span: span)
             view.setRegion(region, animated: true)
         }
-        coordinator.lastCenterLocation = self.loc
+        coordinator.lastCenterLocation = loc
         //
-        if let loc = self.pin, loc != coordinator.lastPinLocation {
+        if let loc = pin, loc != coordinator.lastPinLocation {
             for a in view.annotations {
                 view.removeAnnotation(a)
             }
@@ -58,7 +56,7 @@ struct LocationPicker: UIViewRepresentable {
 //            annotation.coordinate = loc
 //            view.addAnnotation(annotation)
         }
-        coordinator.lastPinLocation = self.pin
+        coordinator.lastPinLocation = pin
     }
     
     class Coordinator: NSObject {
@@ -68,7 +66,7 @@ struct LocationPicker: UIViewRepresentable {
         var lastPinLocation: CLLocationCoordinate2D? = nil
         
         let locationManager = CLLocationManager()
-        var myLocation:CLLocationCoordinate2D?
+        var myLocation: CLLocationCoordinate2D?
 
         init(_ parent: LocationPicker) {
             self.parent = parent
@@ -76,7 +74,7 @@ struct LocationPicker: UIViewRepresentable {
         
         func setup() {
             // to get location updates only when the app is in foreground
-            self.locationManager.requestWhenInUseAuthorization()
+            locationManager.requestWhenInUseAuthorization()
             
             Coordinator.shouldUpdateLocation = true
             
@@ -92,18 +90,19 @@ struct LocationPicker: UIViewRepresentable {
         }
         
         func addLongPressGesture() {
-            let longPressRecogniser:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target:self , action:#selector(handleLongPress(_:)))
+            let longPressRecogniser = UILongPressGestureRecognizer(target: self,
+                                                                   action:#selector(handleLongPress(_:)))
             longPressRecogniser.minimumPressDuration = 1.0
             parent.map.addGestureRecognizer(longPressRecogniser)
         }
         
-        @objc func handleLongPress(_ gestureRecognizer:UIGestureRecognizer) {
+        @objc func handleLongPress(_ gestureRecognizer: UIGestureRecognizer) {
             if gestureRecognizer.state != .began {
                 return
             }
             
-            let touchPoint:CGPoint = gestureRecognizer.location(in: parent.map)
-            let touchMapCoordinate:CLLocationCoordinate2D =
+            let touchPoint: CGPoint = gestureRecognizer.location(in: parent.map)
+            let touchMapCoordinate: CLLocationCoordinate2D =
                 parent.map.convert(touchPoint, toCoordinateFrom: parent.map)
             
             parent.pin = touchMapCoordinate
@@ -118,12 +117,12 @@ struct LocationPicker: UIViewRepresentable {
             if (parent.map.showsUserLocation) {
                 parent.map.showsUserLocation = false
                 //parent.map.removeAnnotations(parent.map.annotations)
-                self.locationManager.stopUpdatingLocation()
+                locationManager.stopUpdatingLocation()
             }
         }
         
-        func centerMap(_ center:CLLocationCoordinate2D) {
-            self.saveCurrentLocation(center)
+        func centerMap(_ center: CLLocationCoordinate2D) {
+            saveCurrentLocation(center)
             print("centerMap")
             
             // get current region
@@ -136,22 +135,20 @@ struct LocationPicker: UIViewRepresentable {
             parent.map.region.center = center
         }
         
-        func saveCurrentLocation(_ center:CLLocationCoordinate2D) {
+        func saveCurrentLocation(_ center: CLLocationCoordinate2D) {
             myLocation = center
         }
         
-        func updateAnnotationView(_ location:CLLocation) {
-            getPinAddress(location) { (name, address) in
+        func updateAnnotationView(_ location: CLLocation) {
+            getPinAddress(location) { [weak self] (name, address) in
                 let annot = MKPointAnnotation(__coordinate: location.coordinate, title: name, subtitle: address)
-                
-                self.resetTracking()
-                self.parent.map.addAnnotation(annot)
-                
-                self.centerMap(location.coordinate)
+                self?.resetTracking()
+                self?.parent.map.addAnnotation(annot)
+                self?.centerMap(location.coordinate)
             }
         }
         
-        static var shouldUpdateLocation:Bool = true
+        static var shouldUpdateLocation: Bool = true
         func getMyLocation() async {
             if CLLocationManager.locationServicesEnabled() {
                 if Coordinator.shouldUpdateLocation {
@@ -163,7 +160,7 @@ struct LocationPicker: UIViewRepresentable {
             }
         }
         
-        func getPinAddress(_ location:CLLocation, completionHandler: @escaping (String, String) -> Void) {
+        func getPinAddress(_ location: CLLocation, completionHandler: @escaping (String, String) -> Void) {
             CLGeocoder().reverseGeocodeLocation(location) { (placemarks, error) in
                 
                 var name: String = ""
@@ -255,10 +252,9 @@ struct LocationPicker: UIViewRepresentable {
 
 extension LocationPicker.Coordinator: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+        let locValue: CLLocationCoordinate2D = manager.location!.coordinate
         parent.loc = manager.location!
         parent.pin = locValue
-        
         updateAnnotationView(parent.loc!)
     }
 }
@@ -310,11 +306,11 @@ extension LocationPicker.Coordinator: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if view.rightCalloutAccessoryView == control {
             print("remove annotation - close button tapped")
-            self.parent.map.removeAnnotations(self.parent.map.annotations)
-            self.lastPinLocation = nil
-            self.parent.pin = nil
-            self.parent.loc = nil
-            self.resetTracking()
+            parent.map.removeAnnotations(parent.map.annotations)
+            lastPinLocation = nil
+            parent.pin = nil
+            parent.loc = nil
+            resetTracking()
         } else {
             var name = ""
             var addr = ""
@@ -326,7 +322,7 @@ extension LocationPicker.Coordinator: MKMapViewDelegate {
             }
             
             parent.onSelect(parent.pin!, name, addr)
-            parent.presentationMode.wrappedValue.dismiss()
+            parent.dismiss()
         }
     }
 }

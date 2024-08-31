@@ -11,19 +11,25 @@ import UIKit
 import Combine
 import CashTrackerShared
 
+private enum SelectedView: String, CaseIterable, Identifiable {
+    case RecentExpenses = "Recent Expenses"
+    case RecentCredits = "Recent Credits"
+
+    var id: String { rawValue }
+}
+
 struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
-    
     @EnvironmentObject var settings: UserSettings
-    
     @State private var isCreditEntryFormVisible = false
     @State private var isExpenseEntryFormVisible = false
+    @State private var selectedSegment = 0
     
     // listen for UIScene app-became-active notification
-    private let pub = NotificationCenter.default
+    private let sceneActivated = NotificationCenter.default
         .publisher(for: UIScene.didActivateNotification, object: nil)
     
-    private let pub1 = NotificationCenter.default
+    private let settingsChanged = NotificationCenter.default
         .publisher(for: CashTrackerSharedHelper.UserSettingsChangedNotification, object: nil)
     
     @State private var forceRefresh: Bool
@@ -37,7 +43,7 @@ struct ContentView: View {
             VStack {
                 HStack {
                     // dummy if-else to force app refresh when notification is received
-                    if self.forceRefresh {
+                    if forceRefresh {
                         Spacer()
                     } else {
                         Spacer()
@@ -48,125 +54,173 @@ struct ContentView: View {
                 .background(colorScheme == .dark ? Color(UIColor.systemGray5): Color.orange)
                 .foregroundColor(colorScheme == .dark ? Color.orange: Color.black)
                 .cornerRadius(8)
-                .padding(Edge.Set(arrayLiteral: [.leading, .trailing]), 10)
+                .padding([.leading, .trailing], 10)
                 
-                HStack(alignment: .top) {
-                    VStack {
-                        Image("addcash")
-                            .resizable()
-                            .frame(maxWidth: 30, maxHeight: 30).scaledToFit()
-                        Text("Add Cash").fontWeight(.bold)
+                Picker(selection: $selectedSegment,
+                       label: EmptyView()) {
+                    ForEach(SelectedView.allCases.indices, id: \.self) { index in
+                        Text(SelectedView.allCases[index].rawValue).tag(index)
                     }
-                    .contentShape(Rectangle())
-                    .onTapGesture() {
-                        self.isCreditEntryFormVisible.toggle()
-                    }
-                    .padding(.leading, 20)
-                    .popover(isPresented: self.$isCreditEntryFormVisible,
-                             arrowEdge: .bottom) {
-                                CreditEntry(.constant(nil))
-                    }
-                    
-                    Spacer()
-                    
-                    VStack {
-                        Image("expense")
-                            .resizable()
-                            .frame(maxWidth: 30, maxHeight: 30).scaledToFit()
-                        Text("Add Expense").fontWeight(.bold)
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture() {
-                        self.isExpenseEntryFormVisible.toggle()
-                    }
-                    .padding(.leading, 10)
-                    .popover(isPresented: self.$isExpenseEntryFormVisible,
-                             arrowEdge: .bottom) {
-                                ExpenseEntry(.constant(nil))
-                    }
-                    
-                    Spacer()
-                    
-                    NavigationLink(destination:
-                        ExpenseAnalysisContainer()
-                    )
-                    {
-                        VStack {
-                            Image("analysis2")
-                                .resizable()
-                                .frame(maxWidth: 30, maxHeight: 30).scaledToFit()
-                            Text("Analysis").font(.headline).fontWeight(.bold)
-                        }
-                    }
-                    .foregroundColor(colorScheme == .dark ? .white: .black)
-                    .padding(.leading, 10)
-                    
-                    Spacer()
-                    
-                    NavigationLink(destination:
-                        SettingsView()
-                            .environmentObject(self.settings)
-                        )
-                    {
-                        VStack {
-                            Image(systemName: "gear")
-                                .resizable()
-                                .frame(maxWidth: 30, maxHeight: 30).scaledToFit()
-                            Text("Settings").font(.headline).fontWeight(.bold)
-                        }
-                    }
-                    .foregroundColor(colorScheme == .dark ? .white: .black)
-                    .padding(.leading, 10)
-                    .padding(.trailing, 20)
                 }
+                       .pickerStyle(SegmentedPickerStyle())
+                       .padding([.leading, .trailing, .bottom])
                 
-                Divider()
-                
-                RecentCreditsList()
-                
-                RecentExpensesList()
+                if selectedSegment == 0 {
+                    RecentExpensesList()
+                        .transition(.move(edge: .leading))
+                } else {
+                    RecentCreditsList()
+                        .transition(.move(edge: .trailing))
+                }
             }
-            .navigationBarTitle("Cash Expense Tracker")
-        }
-        .onReceive(pub, perform: { (_) in
-            // update a state variable to force UI refresh
-            self.forceRefresh.toggle()
-        })
-            .onReceive(pub1, perform: { (_) in
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Cash Expense Tracker")
+            .animation(.easeInOut, value: selectedSegment)
+            .toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    ToolbarView(isCreditEntryFormVisible: $isCreditEntryFormVisible,
+                                isExpenseEntryFormVisible: $isExpenseEntryFormVisible)
+                }
+            }
+            .onReceive(sceneActivated, perform: { (_) in
                 // update a state variable to force UI refresh
-                self.forceRefresh.toggle()
+                forceRefresh.toggle()
             })
+            .onReceive(settingsChanged, perform: { (_) in
+                // update a state variable to force UI refresh
+                forceRefresh.toggle()
+            })
+        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView().environment(\.locale, Locale(identifier: "hi"))
+#Preview {
+    ContentView()
+        .environment(\.locale, Locale(identifier: "hi"))
+        .environmentObject(UserSettings())
+}
+
+struct ToolbarView: View {
+    @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject var settings: UserSettings
+
+    @Binding var isCreditEntryFormVisible: Bool
+    @Binding var isExpenseEntryFormVisible: Bool
+
+    var body: some View {
+        HStack(alignment: .top) {
+            VStack {
+                Image("addcash")
+                    .resizable()
+                    .scaledToFit()
+                Text("Add Cash")
+                    .font(.caption)
+                    .fontWeight(.bold)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture() {
+                isCreditEntryFormVisible.toggle()
+            }
+            .padding(.leading, 20)
+            .popover(isPresented: $isCreditEntryFormVisible,
+                     arrowEdge: .bottom) {
+                CreditEntry(.constant(nil))
+            }
+
+            Spacer()
+
+            VStack {
+                Image("expense")
+                    .resizable()
+                    .scaledToFit()
+                Text("Add Expense")
+                    .font(.caption)
+                    .fontWeight(.bold)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture() {
+                isExpenseEntryFormVisible.toggle()
+            }
+            .padding(.leading, 10)
+            .popover(isPresented: $isExpenseEntryFormVisible,
+                     arrowEdge: .bottom) {
+                ExpenseEntry(.constant(nil))
+            }
+
+            Spacer()
+
+            NavigationLink(destination:
+                            ExpenseAnalysisContainer()
+            )
+            {
+                VStack {
+                    Image("analysis2")
+                        .resizable()
+                        .scaledToFit()
+                    Text("Analysis")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                }
+            }
+            .foregroundColor(colorScheme == .dark ? .white: .black)
+            .padding(.leading, 10)
+
+            Spacer()
+
+            NavigationLink(destination:
+                            SettingsView()
+                .environmentObject(settings)
+            )
+            {
+                VStack {
+                    Image(systemName: "gear")
+                        .resizable()
+                        .scaledToFit()
+                    Text("Settings")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                }
+            }
+            .foregroundColor(colorScheme == .dark ? .white: .black)
+            .padding(.leading, 10)
+            .padding(.trailing, 20)
+        }
     }
+}
+
+#Preview {
+    ToolbarView(isCreditEntryFormVisible: .constant(false),
+                isExpenseEntryFormVisible: .constant(false))
+    .environment(\.locale, Locale(identifier: "hi"))
+    .environment(\.colorScheme, .light)
+    .environmentObject(UserSettings())
 }
 
 struct CashInHandView: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
-    
     @FetchRequest(fetchRequest: Credit.creditsFetchRequest()) private var credits: FetchedResults<Credit>
-    
     @FetchRequest(fetchRequest: Expense.expensesFetchRequest()) private var expenses: FetchedResults<Expense>
     
-    func sumOfCredits() -> Double {
-        let total = credits.map({$0.amount}).reduce(0, +)
-        return total
+    var sumOfCredits: Double {
+        credits
+            .map({$0.amount})
+            .reduce(0, +)
     }
     
-    func sumOfExpenses() -> Double {
-        let total = expenses.map({$0.amount}).reduce(0, +)
-        return total
+    var sumOfExpenses: Double {
+        expenses
+            .map({$0.amount})
+            .reduce(0, +)
     }
     
     var body: some View {
         VStack {
             (Text("Cash In Hand") + Text(": "))
                 .font(.headline).bold()
-            Text(CashTrackerSharedHelper.currencyFormatter.string(from:(sumOfCredits() - sumOfExpenses()) as NSNumber) ?? "0.00").font(.largeTitle).fontWeight(.heavy)
+            Text(CashTrackerSharedHelper.currencyFormatter.string(from:(sumOfCredits - sumOfExpenses) as NSNumber) ?? "0.00").font(.largeTitle).fontWeight(.heavy)
         }
     }
 }
+
+//#Preview {
+//    CashInHandView()
+//}

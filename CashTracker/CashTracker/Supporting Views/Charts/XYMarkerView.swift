@@ -31,7 +31,7 @@ public class XYMarkerView: BalloonMarker {
            : xAxisValueFormatter.stringForValue(entry.x, axis: XAxis())
         
         let string = "Dt" + ": " + strDate + ", " + "Amt" + ": "
-            + (CashTrackerSharedHelper.currencyFormatter.string(from:entry.y as NSNumber) ?? "\(entry.y)")
+            + (CashTrackerSharedHelper.currencyFormatter.string(from: entry.y as NSNumber) ?? "\(entry.y)")
             
         setLabel(string)
     }

@@ -37,10 +37,8 @@ struct MapView: UIViewRepresentable {
     }
 }
 
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        MapView(coordinate: CLLocationCoordinate2D(latitude: 21.13, longitude: 79.05))
-    }
+#Preview {
+    MapView(coordinate: CLLocationCoordinate2D(latitude: 21.13, longitude: 79.05))
 }
 
 

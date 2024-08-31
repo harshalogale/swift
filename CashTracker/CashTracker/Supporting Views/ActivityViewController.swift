@@ -36,7 +36,7 @@ struct ActivityViewController: UIViewControllerRepresentable {
         
         activityVC.completionWithItemsHandler = { activity, success, items, error in
             print("activityVC completed")
-            self.isShowing = false
+            isShowing = false
         }
         
         return activityVC

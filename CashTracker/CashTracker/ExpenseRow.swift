@@ -14,7 +14,7 @@ struct ExpenseRow: View {
     var body: some View {
         HStack {
             if nil != expense.imageData {
-                Image(uiImage:UIImage(data: expense.imageData!)!)
+                Image(uiImage: UIImage(data: expense.imageData!)!)
                     .resizable()
                     .frame(width: 50, height: 50)
                     .cornerRadius(6.0)
@@ -45,9 +45,21 @@ struct ExpenseRow: View {
             }
             VStack {
                 Spacer()
-                Text(CashTrackerSharedHelper.currencyFormatter.string(from:expense.amount as NSNumber) ?? "").font(.title).padding(15)
+                Text(CashTrackerSharedHelper.currencyFormatter.string(from: expense.amount as NSNumber) ?? "").font(.title).padding(15)
                 Spacer()
             }
         }
     }
+}
+
+#Preview {
+    let context = CashTrackerSharedHelper.persistentContainer.viewContext
+    let expense = Expense(context: context)
+    expense.title = "some item"
+    expense.amount = 12.34
+    expense.notes = "some notes"
+    expense.datetime = Date()
+    expense.business = "some shop"
+    return ExpenseRow(expense: .constant(expense))
+        .environment(\.managedObjectContext, context)
 }

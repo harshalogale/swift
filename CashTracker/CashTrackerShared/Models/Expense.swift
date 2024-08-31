@@ -38,7 +38,7 @@ public class Expense: NSManagedObject, Identifiable {
     }
     
     public static func csv(_ expenses:[Expense]) -> String {
-        return csvHeader
+        csvHeader
             + "\r\n"
             + expenses
                 .map({ $0.csv })
@@ -64,7 +64,8 @@ public class Expense: NSManagedObject, Identifiable {
 extension String {
     var escapeForCSV: String {
         get {
-            return self.replacingOccurrences(of: "\"", with: "\"\"\"")
+            return self
+                .replacingOccurrences(of: "\"", with: "\"\"\"")
                 .replacingOccurrences(of: ",", with: "\",\"")
         }
     }
@@ -73,7 +74,7 @@ extension String {
 public extension Expense {
     var image: Image {
         if nil != imageData {
-            return Image(uiImage:UIImage(data: imageData!)!)
+            return Image(uiImage: UIImage(data: imageData!)!)
         } else {
             return Image("expense1")
         }

@@ -9,15 +9,16 @@ import SwiftUI
 import CashTrackerShared
 
 struct DatePickerView: View {
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss
     
     var date: Binding<Date>
     
     var title: String
-    @State var pickerDate: Date = Date()
+    @State private var pickerDate: Date = Date()
     var innerPickerDate: Date?
     
-    init(_ title:String?, _ selectedDate:Binding<Date>) {
+    init(_ title: String?,
+         _ selectedDate: Binding<Date>) {
         self.title = title ?? "Select Date"
         self.date = selectedDate
         self.pickerDate = selectedDate.wrappedValue
@@ -30,7 +31,7 @@ struct DatePickerView: View {
                 HStack () {
                     Spacer()
                     Button(action: {
-                        self.presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     } ) {
                         HStack {
                             Image(systemName: "text.badge.xmark")
@@ -43,9 +44,9 @@ struct DatePickerView: View {
                     }
                     Spacer()
                     Button(action: {
-                        self.pickerDate = self.pickerDate.zeroSeconds
-                        self.date.wrappedValue = self.pickerDate
-                        self.presentationMode.wrappedValue.dismiss()
+                        pickerDate = pickerDate.zeroSeconds
+                        date.wrappedValue = pickerDate
+                        dismiss()
                     } ) {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
@@ -62,7 +63,7 @@ struct DatePickerView: View {
                 HStack () {
                     Spacer()
                     DatePicker("", selection: $pickerDate).onAppear() {
-                        self.$pickerDate.wrappedValue = self.innerPickerDate!
+                        $pickerDate.wrappedValue = innerPickerDate!
                     }
                     Spacer()
                 }
@@ -72,9 +73,6 @@ struct DatePickerView: View {
     }
 }
 
-struct DatePickerView_Previews: PreviewProvider {
-    static var previews: some View {
-        DatePickerView("Select Date", .constant(Date()))
-            .previewDevice(PreviewDevice(rawValue: "iPhone SE"))
-    }
+#Preview {
+    DatePickerView("Select Date", .constant(Date()))
 }

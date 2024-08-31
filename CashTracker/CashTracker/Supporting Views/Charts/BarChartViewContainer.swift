@@ -62,7 +62,8 @@ struct BarChartViewContainer: UIViewRepresentable {
     
     private var monthDate: Binding<Date>
     
-    init(_ expenses:[Expense], forMonth month:Binding<Date>) {
+    init(_ expenses:[Expense],
+         forMonth month: Binding<Date>) {
         self.expenses = expenses
         
         self.monthDate = month
@@ -79,7 +80,7 @@ struct BarChartViewContainer: UIViewRepresentable {
         Coordinator(self)
     }
     
-    func setChartData(chartView:BarChartView) {
+    func setChartData(chartView: BarChartView) {
         let firstOfMonth = monthDate.wrappedValue.firstDateOfMonth.dayComponent
         let lastOfMonth = monthDate.wrappedValue.lastDateOfMonth.dayComponent
         

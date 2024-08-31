@@ -31,7 +31,7 @@ struct SiriButton: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: INUIAddVoiceShortcutButton, context: UIViewRepresentableContext<SiriButton>) {
-        let btn:INUIAddVoiceShortcutButton = uiView
+        let btn: INUIAddVoiceShortcutButton = uiView
         print("updateUIView: \(btn.shortcut!.description)")
         print("updateUIView: \(btn.shortcut!.intent?.description ?? "no shortcut intent")")
     }
@@ -40,7 +40,7 @@ struct SiriButton: UIViewRepresentable {
         var parent: SiriButton
         
         init(_ siriButton: SiriButton) {
-            self.parent = siriButton
+            parent = siriButton
         }
         
         // MARK: - INUIAddVoiceShortcutButtonDelegate
@@ -60,7 +60,7 @@ struct SiriButton: UIViewRepresentable {
 
 struct SiriShortcutAdder: UIViewControllerRepresentable {
     
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss
     
     @Binding var addVoiceShortcutViewController: INUIAddVoiceShortcutViewController!
     
@@ -82,7 +82,7 @@ struct SiriShortcutAdder: UIViewControllerRepresentable {
         var parent: SiriShortcutAdder
         
         init(_ siriShortcut: SiriShortcutAdder) {
-            self.parent = siriShortcut
+            parent = siriShortcut
         }
         
         // MARK: - INUIAddVoiceShortcutViewControllerDelegate
@@ -90,18 +90,18 @@ struct SiriShortcutAdder: UIViewControllerRepresentable {
         func addVoiceShortcutViewController(_ controller: INUIAddVoiceShortcutViewController, didFinishWith voiceShortcut: INVoiceShortcut?, error: Error?) {
             print(String(describing: voiceShortcut!))
             print("addVoiceShortcutVC: \(voiceShortcut!.shortcut.intent?.description ?? "no shortcut intent")")
-            parent.presentationMode.wrappedValue.dismiss()
+            parent.dismiss()
         }
         
         func addVoiceShortcutViewControllerDidCancel(_ controller: INUIAddVoiceShortcutViewController) {
-            parent.presentationMode.wrappedValue.dismiss()
+            parent.dismiss()
         }
     }
 }
 
 struct SiriShortcutEditor: UIViewControllerRepresentable {
     
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.dismiss) var dismiss
     
     @Binding var editVoiceShortcutViewController: INUIEditVoiceShortcutViewController!
     
@@ -125,20 +125,20 @@ struct SiriShortcutEditor: UIViewControllerRepresentable {
         var parent: SiriShortcutEditor
         
         init(_ siriShortcut: SiriShortcutEditor) {
-            self.parent = siriShortcut
+            parent = siriShortcut
         }
         
         // MARK: - INUIEditVoiceShortcutViewControllerDelegate
         
         func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didUpdate voiceShortcut: INVoiceShortcut?, error: Error?) {
-            parent.presentationMode.wrappedValue.dismiss()
+            parent.dismiss()
         }
         func editVoiceShortcutViewController(_ controller: INUIEditVoiceShortcutViewController, didDeleteVoiceShortcutWithIdentifier deletedVoiceShortcutIdentifier: UUID) {
-            parent.presentationMode.wrappedValue.dismiss()
+            parent.dismiss()
         }
         
         func editVoiceShortcutViewControllerDidCancel(_ controller: INUIEditVoiceShortcutViewController) {
-            parent.presentationMode.wrappedValue.dismiss()
+            parent.dismiss()
         }
     }
 }

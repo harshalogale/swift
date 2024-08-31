@@ -29,7 +29,7 @@ public class RecentCashIntentHandler: NSObject, RecentCashIntentHandling {
             print("Recent cash additions:")
             
             for csh in recentCash {
-                let amtStr = CashTrackerSharedHelper.currencyFormatter.string(from:csh.amount as NSNumber) ?? "0.00"
+                let amtStr = CashTrackerSharedHelper.currencyFormatter.string(from: csh.amount as NSNumber) ?? "0.00"
                 let cshStr = "\n\(csh.title!), \(amtStr)"
                 recent += cshStr
                 print("\(csh.title!), \(csh.amount)")
@@ -38,6 +38,6 @@ public class RecentCashIntentHandler: NSObject, RecentCashIntentHandling {
             print (error)
         }
         
-        completion(RecentCashIntentResponse.success(cash:recent))
+        completion(RecentCashIntentResponse.success(cash: recent))
     }
 }

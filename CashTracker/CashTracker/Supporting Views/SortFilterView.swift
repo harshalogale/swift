@@ -9,8 +9,7 @@ import SwiftUI
 import CashTrackerShared
 
 struct SortFilterView: View {
-    
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     @Binding var startDate: Date
     @Binding var endDate: Date
@@ -26,7 +25,7 @@ struct SortFilterView: View {
                     .font(.title).fontWeight(.bold).padding(.leading, 15)
                 Spacer()
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }) {
                     Text("Done")
                         .font(.headline).fontWeight(.bold).padding(5).padding(.trailing, 15)
@@ -42,14 +41,12 @@ struct SortFilterView: View {
     }
 }
 
-struct SortFilterView_Previews: PreviewProvider {
-    static var previews: some View {
-        SortFilterView(startDate: .constant(Date()),
-                          endDate: .constant(Date().addingTimeInterval(36000)),
-                          sortOrder: .constant(SortListView.SortOrder.Descending),
-                          sortOn: .constant("datetime"),
-                          sortableColumns: .constant(["ColA", "ColB", "ColC"]))
-    }
+#Preview {
+    SortFilterView(startDate: .constant(Date()),
+                   endDate: .constant(Date().addingTimeInterval(36000)),
+                   sortOrder: .constant(SortListView.SortOrder.Descending),
+                   sortOn: .constant("datetime"),
+                   sortableColumns: .constant(["ColA", "ColB", "ColC"]))
 }
 
 
@@ -88,7 +85,7 @@ struct SortListView: View {
                         HStack {
                             Text(LocalizedStringKey(prop.capitalized))
                             Spacer()
-                            if self.sortOn == prop {
+                            if sortOn == prop {
                                 Image(systemName: "checkmark")
                                     .foregroundColor(.gray)
                                     .imageScale(.large)
@@ -96,7 +93,7 @@ struct SortListView: View {
                         }
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            self.sortOn = prop
+                            sortOn = prop
                         }
                     }
                 }
@@ -128,7 +125,7 @@ struct FilterListView: View {
                 
                 VStack {
                     Button(action: {
-                        self.modalDisplayed1 = true
+                        modalDisplayed1 = true
                     } ) {
                         Text("Start Date")
                             .font(.headline)
@@ -137,13 +134,13 @@ struct FilterListView: View {
                     }
                     .sheet(isPresented: $modalDisplayed1) {
                         Spacer()
-                        DatePickerView("Update Start Date", self.$startDate)
+                        DatePickerView("Update Start Date", $startDate)
                     }
-                    Text("\(DateFormatter.expDateOnlyFormatter.string(from: self.startDate))")
+                    Text("\(DateFormatter.expDateOnlyFormatter.string(from: startDate))")
                         .font(.subheadline)
                         .padding(2)
                         .padding(.leading, 10)
-                    Text("\(DateFormatter.expTimeOnlyFormatter.string(from: self.startDate))")
+                    Text("\(DateFormatter.expTimeOnlyFormatter.string(from: startDate))")
                         .padding(2)
                         .padding(.leading, 10)
                 }
@@ -152,7 +149,7 @@ struct FilterListView: View {
                 
                 VStack {
                     Button(action: {
-                        self.modalDisplayed2 = true
+                        modalDisplayed2 = true
                     } ) {
                         Text("End Date")
                             .font(.headline)
@@ -160,13 +157,13 @@ struct FilterListView: View {
                             .padding(.leading, 10)
                     }
                     .sheet(isPresented: $modalDisplayed2) {
-                        DatePickerView("Update End Date", self.$endDate)
+                        DatePickerView("Update End Date", $endDate)
                     }
-                    Text("\(DateFormatter.expDateOnlyFormatter.string(from: self.endDate))")
+                    Text("\(DateFormatter.expDateOnlyFormatter.string(from: endDate))")
                         .font(.subheadline)
                         .padding(2)
                         .padding(.leading, 10)
-                    Text("\(DateFormatter.expTimeOnlyFormatter.string(from: self.endDate))")
+                    Text("\(DateFormatter.expTimeOnlyFormatter.string(from: endDate))")
                         .padding(2)
                         .padding(.leading, 10)
                 }

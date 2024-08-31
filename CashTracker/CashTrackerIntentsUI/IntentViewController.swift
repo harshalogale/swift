@@ -24,7 +24,7 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        self.view.backgroundColor = UIColor.lightGray
+        view.backgroundColor = UIColor.lightGray
     }
         
     // MARK: - INUIHostedViewControlling
@@ -34,8 +34,8 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
         // Do configuration here, including preparing views and calculating a desired size for presentation.
         
         if let cashIntent = interaction.intent as? AddCashIntent {
-            let labelText:String
-            let messageText:String
+            let labelText: String
+            let messageText: String
             
             if let resp = interaction.intentResponse as? AddCashIntentResponse, resp.code == AddCashIntentResponseCode.success {
                 labelText = "Success"
@@ -55,11 +55,11 @@ class IntentViewController: UIViewController, INUIHostedViewControlling {
             messageTextView.text = messageText
         }
         
-        completion(true, parameters, self.desiredSize)
+        completion(true, parameters, desiredSize)
     }
     
     var desiredSize: CGSize {
-        return self.extensionContext!.hostedViewMinimumAllowedSize
+        extensionContext?.hostedViewMinimumAllowedSize ?? .zero
     }
     
 }

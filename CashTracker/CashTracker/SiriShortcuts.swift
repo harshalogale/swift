@@ -83,7 +83,7 @@ struct SiriShortcuts: View {
                     .background(CenteringView())
                     .sheet(isPresented: $showingSiriEditor1,
                            content: {
-                            SiriShortcutEditor(editVoiceShortcutViewController: self.$editVoiceShortcutVC1)
+                            SiriShortcutEditor(editVoiceShortcutViewController: $editVoiceShortcutVC1)
                     })
                 
                 SiriButton(intent: AddExpenseIntent(),
@@ -93,7 +93,7 @@ struct SiriShortcuts: View {
                            editVoiceShortcutVC: $editVoiceShortcutVC1)
                     .sheet(isPresented: $showingSiriAdder1,
                            content: {
-                            SiriShortcutAdder(addVoiceShortcutViewController: self.$addVoiceShortcutVC1)
+                            SiriShortcutAdder(addVoiceShortcutViewController: $addVoiceShortcutVC1)
                     })
             }
             
@@ -103,7 +103,7 @@ struct SiriShortcuts: View {
                     .background(CenteringView())
                     .sheet(isPresented: $showingSiriEditor2,
                            content: {
-                            SiriShortcutEditor(editVoiceShortcutViewController: self.$editVoiceShortcutVC2)
+                            SiriShortcutEditor(editVoiceShortcutViewController: $editVoiceShortcutVC2)
                     })
                 
                 SiriButton(intent: AddCashIntent(),
@@ -113,7 +113,7 @@ struct SiriShortcuts: View {
                            editVoiceShortcutVC: $editVoiceShortcutVC2)
                     .sheet(isPresented: $showingSiriAdder2,
                            content: {
-                            SiriShortcutAdder(addVoiceShortcutViewController: self.$addVoiceShortcutVC2)
+                            SiriShortcutAdder(addVoiceShortcutViewController: $addVoiceShortcutVC2)
                     })
             }
 
@@ -123,7 +123,7 @@ struct SiriShortcuts: View {
                     .background(CenteringView())
                     .sheet(isPresented: $showingSiriEditor3,
                            content: {
-                            SiriShortcutEditor(editVoiceShortcutViewController: self.$editVoiceShortcutVC3)
+                            SiriShortcutEditor(editVoiceShortcutViewController: $editVoiceShortcutVC3)
                     })
                 
                 SiriButton(intent: CashInHandIntent(),
@@ -133,7 +133,7 @@ struct SiriShortcuts: View {
                            editVoiceShortcutVC: $editVoiceShortcutVC3)
                     .sheet(isPresented: $showingSiriAdder3,
                            content: {
-                            SiriShortcutAdder(addVoiceShortcutViewController: self.$addVoiceShortcutVC3)
+                            SiriShortcutAdder(addVoiceShortcutViewController: $addVoiceShortcutVC3)
                     })
             }
             
@@ -144,7 +144,7 @@ struct SiriShortcuts: View {
                     .background(CenteringView())
                     .sheet(isPresented: $showingSiriEditor4,
                            content: {
-                            SiriShortcutEditor(editVoiceShortcutViewController: self.$editVoiceShortcutVC4)
+                            SiriShortcutEditor(editVoiceShortcutViewController: $editVoiceShortcutVC4)
                     })
                 
                 SiriButton(intent: RecentExpensesIntent(),
@@ -154,7 +154,7 @@ struct SiriShortcuts: View {
                            editVoiceShortcutVC: $editVoiceShortcutVC4)
                     .sheet(isPresented: $showingSiriAdder4,
                            content: {
-                            SiriShortcutAdder(addVoiceShortcutViewController: self.$addVoiceShortcutVC4)
+                            SiriShortcutAdder(addVoiceShortcutViewController: $addVoiceShortcutVC4)
                     })
             }
             
@@ -165,7 +165,7 @@ struct SiriShortcuts: View {
                     .background(CenteringView())
                     .sheet(isPresented: $showingSiriEditor5,
                            content: {
-                            SiriShortcutEditor(editVoiceShortcutViewController: self.$editVoiceShortcutVC5)
+                            SiriShortcutEditor(editVoiceShortcutViewController: $editVoiceShortcutVC5)
                     })
                 
                 SiriButton(intent: RecentCashIntent(),
@@ -175,7 +175,7 @@ struct SiriShortcuts: View {
                            editVoiceShortcutVC: $editVoiceShortcutVC5)
                     .sheet(isPresented: $showingSiriAdder5,
                            content: {
-                            SiriShortcutAdder(addVoiceShortcutViewController: self.$addVoiceShortcutVC5)
+                            SiriShortcutAdder(addVoiceShortcutViewController: $addVoiceShortcutVC5)
                     })
             }
             
@@ -186,7 +186,7 @@ struct SiriShortcuts: View {
                     .background(CenteringView())
                     .sheet(isPresented: $showingSiriEditor6,
                            content: {
-                            SiriShortcutEditor(editVoiceShortcutViewController: self.$editVoiceShortcutVC6)
+                            SiriShortcutEditor(editVoiceShortcutViewController: $editVoiceShortcutVC6)
                     })
                 
                 SiriButton(intent: AddPaymentIntent(),
@@ -196,64 +196,64 @@ struct SiriShortcuts: View {
                            editVoiceShortcutVC: $editVoiceShortcutVC6)
                     .sheet(isPresented: $showingSiriAdder6,
                            content: {
-                            SiriShortcutAdder(addVoiceShortcutViewController: self.$addVoiceShortcutVC6)
+                            SiriShortcutAdder(addVoiceShortcutViewController: $addVoiceShortcutVC6)
                     })
             }
             
             
-//            SiriButtonView(title:"Add Expense",
-//                           width:self.width,
-//                           intent:AddExpenseIntent(),
-//                           showAdder:self.$showingSiriAdder1,
-//                           showEditor:self.$showingSiriEditor1,
-//                           adder:self.$addVoiceShortcutVC1,
-//                           editor:self.$editVoiceShortcutVC1)
+//            SiriButtonView(title: "Add Expense",
+//                           width: width,
+//                           intent: AddExpenseIntent(),
+//                           showAdder: $showingSiriAdder1,
+//                           showEditor: $showingSiriEditor1,
+//                           adder: $addVoiceShortcutVC1,
+//                           editor: $editVoiceShortcutVC1)
 //
-//            SiriButtonView(title:"Add Cash",
-//                           width:self.width,
-//                           intent:AddCashIntent(),
-//                           showAdder:self.$showingSiriAdder2,
-//                           showEditor:self.$showingSiriEditor2,
-//                           adder:self.$addVoiceShortcutVC2,
-//                           editor:self.$editVoiceShortcutVC2)
+//            SiriButtonView(title: "Add Cash",
+//                           width: width,
+//                           intent: AddCashIntent(),
+//                           showAdder: $showingSiriAdder2,
+//                           showEditor: $showingSiriEditor2,
+//                           adder: $addVoiceShortcutVC2,
+//                           editor: $editVoiceShortcutVC2)
 //
-//            SiriButtonView(title:"Show Cash-In-Hand",
-//                           width:self.width,
-//                           intent:CashInHandIntent(),
-//                           showAdder:self.$showingSiriAdder3,
-//                           showEditor:self.$showingSiriEditor3,
-//                           adder:self.$addVoiceShortcutVC3,
-//                           editor:self.$editVoiceShortcutVC3)
+//            SiriButtonView(title: "Show Cash-In-Hand",
+//                           width: width,
+//                           intent: CashInHandIntent(),
+//                           showAdder: $showingSiriAdder3,
+//                           showEditor: $showingSiriEditor3,
+//                           adder: $addVoiceShortcutVC3,
+//                           editor: $editVoiceShortcutVC3)
 //
-//            SiriButtonView(title:"Show Recent Expenses",
-//                           width:self.width,
-//                           intent:RecentExpensesIntent(),
-//                           showAdder:self.$showingSiriAdder4,
-//                           showEditor:self.$showingSiriEditor4,
-//                           adder:self.$addVoiceShortcutVC4,
-//                           editor:self.$editVoiceShortcutVC4)
+//            SiriButtonView(title: "Show Recent Expenses",
+//                           width: width,
+//                           intent: RecentExpensesIntent(),
+//                           showAdder: $showingSiriAdder4,
+//                           showEditor: $showingSiriEditor4,
+//                           adder: $addVoiceShortcutVC4,
+//                           editor: $editVoiceShortcutVC4)
 //
-//            SiriButtonView(title:"Show Recent Cash Additions",
-//                           width:self.width,
-//                           intent:RecentCashIntent(),
-//                           showAdder:self.$showingSiriAdder5,
-//                           showEditor:self.$showingSiriEditor5,
-//                           adder:self.$addVoiceShortcutVC5,
-//                           editor:self.$editVoiceShortcutVC5)
+//            SiriButtonView(title: "Show Recent Cash Additions",
+//                           width: width,
+//                           intent: RecentCashIntent(),
+//                           showAdder: $showingSiriAdder5,
+//                           showEditor: $showingSiriEditor5,
+//                           adder: $addVoiceShortcutVC5,
+//                           editor: $editVoiceShortcutVC5)
 //
-//            SiriButtonView(title:"Add Payment",
-//                           width:self.width,
-//                           intent:AddPaymentIntent(),
-//                           showAdder:self.$showingSiriAdder6,
-//                           showEditor:self.$showingSiriEditor6,
-//                           adder:self.$addVoiceShortcutVC6,
-//                           editor:self.$editVoiceShortcutVC6)
+//            SiriButtonView(title: "Add Payment",
+//                           width: width,
+//                           intent: AddPaymentIntent(),
+//                           showAdder: $showingSiriAdder6,
+//                           showEditor: $showingSiriEditor6,
+//                           adder: $addVoiceShortcutVC6,
+//                           editor: $editVoiceShortcutVC6)
         }
         .onPreferenceChange(CenteringColumnPreferenceKey.self) { preferences in
             for p in preferences {
-                let oldWidth = self.width ?? CGFloat.zero
+                let oldWidth = width ?? CGFloat.zero
                 if p.width > oldWidth {
-                    self.width = p.width
+                    width = p.width
                 }
             }
         }
@@ -271,13 +271,13 @@ struct SiriButtonView: View {
     private var adder: Binding<INUIAddVoiceShortcutViewController?>
     private var editor: Binding<INUIEditVoiceShortcutViewController?>
     
-    init(title:String,
-         width:CGFloat?,
-         intent:INIntent,
-         showAdder:Binding<Bool>,
-         showEditor:Binding<Bool>,
-         adder:Binding<INUIAddVoiceShortcutViewController?>,
-         editor:Binding<INUIEditVoiceShortcutViewController?>) {
+    init(title: String,
+         width: CGFloat?,
+         intent: INIntent,
+         showAdder: Binding<Bool>,
+         showEditor: Binding<Bool>,
+         adder: Binding<INUIAddVoiceShortcutViewController?>,
+         editor: Binding<INUIEditVoiceShortcutViewController?>) {
         self.title = title
         self.width = width
         self.intent = intent
@@ -290,27 +290,25 @@ struct SiriButtonView: View {
     var body: some View {
         HStack {
             Text(title)
-                .frame(width: self.width, alignment: .leading)
+                .frame(width: width, alignment: .leading)
                 .background(CenteringView())
             SiriButton(intent: RecentExpensesIntent(),
-                       shouldPresentSiriAdder: self.$showAdder,
-                       shouldPresentSiriEditor: self.$showEditor,
-                       addVoiceShortcutVC: self.adder,
-                       editVoiceShortcutVC: self.editor)
+                       shouldPresentSiriAdder: $showAdder,
+                       shouldPresentSiriEditor: $showEditor,
+                       addVoiceShortcutVC: adder,
+                       editVoiceShortcutVC: editor)
         }
-        .sheet(isPresented: self.$showEditor,
+        .sheet(isPresented: $showEditor,
                content: {
-                SiriShortcutEditor(editVoiceShortcutViewController: self.editor)
+                SiriShortcutEditor(editVoiceShortcutViewController: editor)
         })
-        .sheet(isPresented: self.$showAdder,
+        .sheet(isPresented: $showAdder,
                content: {
-                SiriShortcutAdder(addVoiceShortcutViewController: self.adder)
+                SiriShortcutAdder(addVoiceShortcutViewController: adder)
         })
     }
 }
 
-struct SiriShortcuts_Previews: PreviewProvider {
-    static var previews: some View {
-        SiriShortcuts()
-    }
+#Preview {
+    SiriShortcuts()
 }
